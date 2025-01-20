@@ -1,0 +1,2 @@
+folder for storing large files to be translated
+to be encrypted and stored on server

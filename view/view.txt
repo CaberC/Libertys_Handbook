@@ -1,0 +1,1 @@
+templates to render the retrieved data as html/css
