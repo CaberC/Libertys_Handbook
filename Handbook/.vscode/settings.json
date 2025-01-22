@@ -1,4 +1,3 @@
-/**
 {
     "sqltools.connections": [
         {
@@ -16,5 +15,4 @@
             "connectionTimeout": 300
         }
     ]
-} 
-**/
+}
