@@ -18,53 +18,75 @@
     ]
 } 
 **/
-using Microsoft.Data.SqlClient;
+using Microsoft;
 using System;
 using System.Threading.Tasks;
+using System.Data.SqlTypes;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Setup;
+using System.Security;
 
-namespace setup{
-    public static void main(String[] args){
-        start.testconn();
-    }
-    class start{
-        static async testconn(){
+namespace Setup{
+
+    class Start{
+        public static async void Testconn(){
             Console.WriteLine("START");
-            var builder = new SqlConnectionStringBuilder{
-                DataSource = "localhost",
-                UserID = "root",
-                Password = "handbook",
-                InitialCatalog = "handbook"
-            };
+            
+            var connectionString = "Server=local, 3360;Database=handbook;";
+            SecureString pwd = getPwd();
+            
+            if(pwd != null){
+                SqlCredential cred = null;
+                try{
+                    cred = new SqlCredential("root", pwd);
+                }catch(Exception e){
+                    Console.WriteLine(e.ToString());
+                }
+                
+                try{
+                    await using var connection = new SqlConnection(connectionString, cred);
+                    Console.WriteLine("\nQuery data example:");
+                    var sql = "SELECT * FROM user";
+                    Console.WriteLine(sql);
 
-            var connectionString = builder.ConnectionString;
+                    connection.Open();
 
-            try{
-                await using var connection = new SqlConnection(connectionString);
-                Console.WriteLine("\nQuery data example:");
-                Console.WriteLine("=========================================\n");
+                    await using var command = new SqlCommand(sql, connection);
+                    await using var reader = await command.ExecuteReaderAsync();
 
-                await connection.OpenAsync();
-
-                var sql = "SELECT * FROM user";
-                await using var command = new SqlCommand(sql, connection);
-                await using var reader = await command.ExecuteReaderAsync();
-
-                while (await reader.ReadAsync())
-                {
-                    Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
+                    while (await reader.ReadAsync())
+                    {
+                        Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
+                    }
+                }
+                catch (Exception e)            {
+                    Console.WriteLine(e.ToString());
                 }
             }
-            catch (SqlException e) when (e.Number == /* specific error number */)
-            {
-                Console.WriteLine($"SQL Error: {e.Message}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
+            
             Console.WriteLine("\nDone. Press enter.");
             Console.ReadLine();
+        }
+
+        private static SecureString getPwd(){
+            SecureString securePwd = new SecureString();
+            string file = @"C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\data\word.txt"; 
+            string str;
+            
+            if (File.Exists(file)) { 
+                str = File.ReadAllText(file);
+                char[] chars = str.ToCharArray();
+                foreach(char c in chars){
+                    securePwd.AppendChar(c);
+                }
+            }else{
+                Console.WriteLine("ERR: no password found");
+                securePwd = null;
+            }
+            securePwd.MakeReadOnly();
+            return securePwd;
         }
     }
 }
