@@ -1,2 +1,2 @@
 # Libertys_Handbook
-Capstone for Caber Caldwell and Gunner Rassmussen
+Capstone for Caber Caldwell and Gunnar Rasmussen
