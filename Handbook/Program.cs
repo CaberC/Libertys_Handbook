@@ -1,29 +1,39 @@
-var builder = WebApplication.CreateBuilder(args);
+namespace Program{
+    class Program{
+        static void Main(){
+            Setup.Start.Testconn();
+        }
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+        void App(){
+            var builder = WebApplication.CreateBuilder();
 
-var app = builder.Build();
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+            var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseRouting();
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-app.UseAuthorization();
+            app.UseHttpsRedirection();
+            app.UseRouting();
 
-app.MapStaticAssets();
+            app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+            app.MapStaticAssets();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
 
 
 app.Run();
+        }
+    }
+}
