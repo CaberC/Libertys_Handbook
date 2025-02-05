@@ -1,7 +1,7 @@
 namespace Program{
     class Program{
         static void Main(){
-            Setup.Start.Testconn();
+            //Setup.Start.BuildConn();
         }
 
         void App(){

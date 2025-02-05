@@ -1,22 +1,5 @@
 /**
-{
-    "sqltools.connections": [
-        {
-            "mysqlOptions": {
-                "authProtocol": "xprotocol",
-                "enableSsl": "Disabled"
-            },
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 33060,
-            "driver": "MySQL",
-            "name": "handbook",
-            "database": "handbook",
-            "username": "root",
-            "connectionTimeout": 300
-        }
-    ]
-} 
+sqlcmd -S LAPTOP-1EVATMPF\MSSQLSERVER01 -E
 **/
 using Microsoft;
 using System;
@@ -31,62 +14,52 @@ using System.Security;
 namespace Setup{
 
     class Start{
-        public static async void Testconn(){
-            Console.WriteLine("START");
-            
-            var connectionString = "Server=local, 3360;Database=handbook;";
-            SecureString pwd = getPwd();
-            
-            if(pwd != null){
-                SqlCredential cred = null;
+        SqlConnection connection = new SqlConnection("Server=localhost\\MSSQLSERVER01;Database=master;Trusted_Connection=True;TrustServerCertificate=True;");
+        public async void BuildConn(){
+            Console.WriteLine("START");  
                 try{
-                    cred = new SqlCredential("root", pwd);
-                }catch(Exception e){
-                    Console.WriteLine(e.ToString());
-                }
-                
-                try{
-                    await using var connection = new SqlConnection(connectionString, cred);
                     Console.WriteLine("\nQuery data example:");
-                    var sql = "SELECT * FROM user";
+                    var sql = "SELECT * FROM person;";
                     Console.WriteLine(sql);
 
                     connection.Open();
 
-                    await using var command = new SqlCommand(sql, connection);
-                    await using var reader = await command.ExecuteReaderAsync();
+                    var command = new SqlCommand(sql, connection);
+                    var reader = command.ExecuteReader();
 
-                    while (await reader.ReadAsync())
-                    {
-                        Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
-                    }
                 }
                 catch (Exception e)            {
                     Console.WriteLine(e.ToString());
                 }
+        }
+        public Boolean CloseConn(){
+            try{
+                connection.Close();
+                return true;
+            }catch(Exception e){
+                Console.WriteLine(e.ToString());
+                return false;
             }
-            
-            Console.WriteLine("\nDone. Press enter.");
-            Console.ReadLine();
+        }
+        public String ReadReader(SqlDataReader reader){
+            try{
+                String str = "";
+                Console.WriteLine(reader);
+                while (reader.Read()){
+                    for (int i  = 0; i< reader.FieldCount; i++){
+                        str=str+reader.GetName(i)+" : "+reader[i]+", ";
+                    }
+                    str=str+"\n";
+                    Console.WriteLine(String.Format("{0}, {1}", reader[0], reader[1]));
+                }
+
+                reader.Close();
+                return str;
+            }catch (Exception e){
+                Console.WriteLine(e.ToString());
+                return null;
+            }
         }
 
-        private static SecureString getPwd(){
-            SecureString securePwd = new SecureString();
-            string file = @"C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\data\word.txt"; 
-            string str;
-            
-            if (File.Exists(file)) { 
-                str = File.ReadAllText(file);
-                char[] chars = str.ToCharArray();
-                foreach(char c in chars){
-                    securePwd.AppendChar(c);
-                }
-            }else{
-                Console.WriteLine("ERR: no password found");
-                securePwd = null;
-            }
-            securePwd.MakeReadOnly();
-            return securePwd;
-        }
     }
 }
