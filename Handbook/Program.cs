@@ -1,7 +1,12 @@
+using Setup;
+
 namespace Program{
     class Program{
         static void Main(){
-            //Setup.Start.BuildConn();
+            Start conn = new Start();
+            conn.TestConn();
+            var str = conn.UseConn("SELECT UserName FROM person WHERE ID = 0;");
+            Console.WriteLine(str);
         }
 
         void App(){
