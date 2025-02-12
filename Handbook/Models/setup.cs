@@ -1,17 +1,9 @@
 /**
 sqlcmd -S LAPTOP-1EVATMPF\MSSQLSERVER01 -E
 **/
-using Microsoft;
-using System;
-using System.Threading.Tasks;
-using System.Data.SqlTypes;
-using System.Data;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Setup;
-using System.Security;
 
-namespace Setup{
+namespace Program{
 
     class Start{
         SqlConnection connection;
@@ -24,7 +16,7 @@ namespace Setup{
             var sql = "SELECT * FROM person;";
             Console.WriteLine(sql);
             try{
-                String str = UseConn(sql);
+                string str = UseConn(sql);
                 Console.WriteLine(str);
                 return true;
             }catch{
@@ -34,9 +26,9 @@ namespace Setup{
 
                 
         }
-        public String ReadReader(SqlDataReader reader){
+        public string ReadReader(SqlDataReader reader){
             try{
-                String str = "";
+                string str = "";
                 while (reader.Read()){
                     for (int i  = 0; i< reader.FieldCount; i++){
                         str=str+reader.GetName(i)+" : "+reader[i]+", ";
@@ -50,13 +42,13 @@ namespace Setup{
                 return null;
             }
         }
-        public String UseConn(String sql){
+        public string UseConn(string sql){
             try{
                 connection.Open();
 
                 var command = new SqlCommand(sql, connection);
                 var reader = command.ExecuteReader();
-                String str = ReadReader(reader);
+                string str = ReadReader(reader);
 
                 connection.Close();
                 return str;
