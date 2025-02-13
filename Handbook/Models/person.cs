@@ -7,7 +7,7 @@ namespace Program{
         private string Password;
         private int Zip;
         private float Range;
-        public void Setup(string UserName, string Email, string Password, int Zip, float Range){
+        public Person(string UserName, string Email, string Password, int Zip, float Range){
             this.UserName = UserName;
             this.Email = Email;
             this.Password = Password;
@@ -29,13 +29,30 @@ namespace Program{
         public void SetRange(float Range){
             this.Range = Range;
         }
+        public string GetUserName(){
+            return UserName;
+        }
+        public string GetEmail(){
+            return Email;
+        }
+        public string GetPassword(){
+            return Password;
+        }
+        public int GetZip(){
+            return Zip;
+        }
+        public float GetRange(){
+            return Range;
+        }
+
         public bool Create(){
             try{
                 Start sqlConn = new Start();
                 string maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
+                string[] strArr = SplitReader(maxStr);
                 int maxInt;
-                if (int.TryParse(maxStr, out maxInt)){
-                    sqlConn.UseConn("INSERT INTO person VALUES("+(maxInt++)+", "+UserName+", "+Email+", "+Password+", "+Zip+", "+Range+" );");
+                if (int.TryParse(strArr[0], out maxInt)){
+                    sqlConn.UseConn("INSERT INTO person VALUES(ID = "+(maxInt++)+" UserName = "+UserName+" Email = "+Email+" Password = "+Password+" Zip = "+Zip+" Range = "+Range+" );");
                 }else{
                     throw new Exception("NOT AN INTEGER "+maxStr);
                 }
@@ -67,7 +84,11 @@ namespace Program{
                 Start sqlConn = new Start();
                 string str = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";");
                 string[] strArr = SplitReader(str);
-                //finish implimenting: read from array into class vars + gets for vars + general update from vars
+                UserName = strArr[1];
+                Email = strArr[2];
+                Password = strArr[3];
+                Zip = int.Parse(strArr[4]);
+                Range = float.Parse(strArr[5]);
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -77,13 +98,14 @@ namespace Program{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("UPDATE person SET password = "+Password+" WHERE ID = "+ID+";");
+                sqlConn.UseConn("UPDATE person SET UserName = "+UserName+" Email = "+Email+" Password = "+Password+" Zip = "+Zip+" Range = "+Range+" WHERE ID = "+ID+";");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
                 return false;
             }
         }
+        //ADD DELETE FROM ALL TABLES AS THEY'RE ADDED
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
@@ -96,12 +118,17 @@ namespace Program{
             }
         }
         private string[] SplitReader(string str){
-            string[] outStr = new string[0];
             string[] sub = str.Split(',');
+            string[] outStr = new string[sub.Length*2];
 
+            int i = 0;
             foreach(string s in sub){
-                int index = s.IndexOf(':')+1;
-                outStr.Append(s.Substring(index));
+                int index = s.IndexOf(" \n");
+                if (index>0) s.Remove(index);
+                index = s.IndexOf(':')+2;
+                string subStr = s.Substring(index);
+                outStr[i] = subStr;
+                i++;
             }
 
             return outStr;
