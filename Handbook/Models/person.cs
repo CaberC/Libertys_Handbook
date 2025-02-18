@@ -52,7 +52,7 @@ namespace Program{
                 string[] strArr = SplitReader(maxStr);
                 int maxInt;
                 if (int.TryParse(strArr[0], out maxInt)){
-                    sqlConn.UseConn("INSERT INTO person VALUES(ID = "+(maxInt++)+" UserName = "+UserName+" Email = "+Email+" Password = "+Password+" Zip = "+Zip+" Range = "+Range+" );");
+                    sqlConn.UseConn("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+1+", \'"+UserName+"\', \'"+Email+"\', \'"+Password+"\', "+Zip+", "+Range+");");
                 }else{
                     throw new Exception("NOT AN INTEGER "+maxStr);
                 }
@@ -65,7 +65,7 @@ namespace Program{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string str = sqlConn.UseConn("SELECT * FROM person WHERE UserName = "+UserName+" AND Email = "+Email+";");
+                string str = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';");
                 string[] strArr = SplitReader(str);
                 str = strArr[0];
                 int maxInt;
@@ -98,7 +98,7 @@ namespace Program{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("UPDATE person SET UserName = "+UserName+" Email = "+Email+" Password = "+Password+" Zip = "+Zip+" Range = "+Range+" WHERE ID = "+ID+";");
+                sqlConn.UseConn("UPDATE person SET UserName = \'"+UserName+"\', Email = \'"+Email+"\', Password = \'"+Password+"\', Zip = "+Zip+", Range = "+Range+" WHERE ID = "+ID+";");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -109,7 +109,7 @@ namespace Program{
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("DELETE FROM person WHERE ID = "+ID+" AND UserName = "+UserName+";");
+                sqlConn.UseConn("DELETE FROM person WHERE ID = "+ID+" AND UserName = \'"+UserName+"\';");
                 return true;   
 
             }catch(Exception e){
