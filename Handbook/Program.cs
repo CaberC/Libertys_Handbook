@@ -2,10 +2,12 @@ namespace Program{
     class Program{
         static void Main(){
             Start conn = new Start();
-            conn.TestConn();
-            var str = conn.UseConn("SELECT UserName FROM person WHERE ID = 0;");
+            //conn.TestConn();
+            var str = conn.UseConn("SELECT * FROM path;");
             Console.WriteLine(str);
             
+            /*
+
             Person person = new Person("Caber", "ex@ampl.e", "12345", 11111, 1.5f);
             if (person.Create()) Console.WriteLine("successful create");
             int id = person.GetID();
@@ -18,6 +20,19 @@ namespace Program{
             if (person.Delete(id)) Console.WriteLine("successful Delete");
             if (!person.Read(id)) Console.WriteLine("double check good");
 
+            CREATE TABLE path (\n"+
+                "ID int,\n"+
+                "Title char(255),\n"+
+                "Posted date,\n"+
+                "PathStr char(255),\n"+
+                "PersonID int NOT NULL,\n"+
+                "PRIMARY KEY (ID),\n"+
+                "FOREIGN KEY (PersonID) REFERENCES person(ID)\n"+
+            ");
+
+            INSERT INTO path (ID, Title, Posted, PathStr, PersonID) VALUES (0, \'test\', \'1975-01-01\', \'./data/\', 0);
+
+            */
         }
 
         void App(){

@@ -52,7 +52,8 @@ namespace Program{
                 string[] strArr = SplitReader(maxStr);
                 int maxInt;
                 if (int.TryParse(strArr[0], out maxInt)){
-                    sqlConn.UseConn("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+1+", \'"+UserName+"\', \'"+Email+"\', \'"+Password+"\', "+Zip+", "+Range+");");
+                    maxInt = maxInt+1;
+                    sqlConn.UseConn("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+", \'"+UserName+"\', \'"+Email+"\', \'"+Password+"\', "+Zip+", "+Range+");");
                 }else{
                     throw new Exception("NOT AN INTEGER "+maxStr);
                 }
