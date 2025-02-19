@@ -47,6 +47,9 @@ namespace Program{
 
         public bool Create(){
             try{
+                if (UserName == null){
+                    throw new Exception("UserName CANNOT BE NULL");
+                }
                 Start sqlConn = new Start();
                 string maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
                 string[] strArr = SplitReader(maxStr);
