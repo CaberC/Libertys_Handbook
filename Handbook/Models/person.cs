@@ -52,7 +52,7 @@ namespace Program{
                 }
                 Start sqlConn = new Start();
                 string maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
-                string[] strArr = SplitReader(maxStr);
+                string[] strArr = Start.SplitReader(maxStr);
                 int maxInt;
                 if (int.TryParse(strArr[0], out maxInt)){
                     maxInt = maxInt+1;
@@ -70,7 +70,7 @@ namespace Program{
             try{
                 Start sqlConn = new Start();
                 string str = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';");
-                string[] strArr = SplitReader(str);
+                string[] strArr = Start.SplitReader(str);
                 str = strArr[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
@@ -87,7 +87,7 @@ namespace Program{
             try{
                 Start sqlConn = new Start();
                 string str = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";");
-                string[] strArr = SplitReader(str);
+                string[] strArr = Start.SplitReader(str);
                 UserName = strArr[1];
                 Email = strArr[2];
                 Password = strArr[3];
@@ -121,21 +121,6 @@ namespace Program{
                 return false;
             }
         }
-        private string[] SplitReader(string str){
-            string[] sub = str.Split(',');
-            string[] outStr = new string[sub.Length*2];
-
-            int i = 0;
-            foreach(string s in sub){
-                int index = s.IndexOf(" \n");
-                if (index>0) s.Remove(index);
-                index = s.IndexOf(':')+2;
-                string subStr = s.Substring(index);
-                outStr[i] = subStr;
-                i++;
-            }
-
-            return outStr;
-        }
+        
     }
 }

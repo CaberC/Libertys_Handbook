@@ -56,5 +56,21 @@ namespace Program{
                 return null;
             }
         }
+        public static string[] SplitReader(string str){
+            string[] sub = str.Split(',');
+            string[] outStr = new string[sub.Length*2];
+
+            int i = 0;
+            foreach(string s in sub){
+                int index = s.IndexOf(" \n");
+                if (index>0) s.Remove(index);
+                index = s.IndexOf(':')+2;
+                string subStr = s.Substring(index);
+                outStr[i] = subStr;
+                i++;
+            }
+
+            return outStr;
+        }
     }
 }
