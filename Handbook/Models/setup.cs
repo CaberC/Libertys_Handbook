@@ -22,8 +22,6 @@ namespace Program{
             }catch{
                 return false;
             }
-            
-
                 
         }
         public string ReadReader(SqlDataReader reader){
