@@ -1687,19 +1687,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Caber\\.nuget\\packages\\": {}
+    "C:\\Users\\roblo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\Handbook.csproj",
+      "projectUniqueName": "C:\\Users\\roblo\\OneDrive\\Documents\\Libertys_Handbook\\Libertys_Handbook\\Handbook\\Handbook.csproj",
       "projectName": "Handbook",
-      "projectPath": "C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\Handbook.csproj",
-      "packagesPath": "C:\\Users\\Caber\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\obj\\",
+      "projectPath": "C:\\Users\\roblo\\OneDrive\\Documents\\Libertys_Handbook\\Libertys_Handbook\\Handbook\\Handbook.csproj",
+      "packagesPath": "C:\\Users\\roblo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\roblo\\OneDrive\\Documents\\Libertys_Handbook\\Libertys_Handbook\\Handbook\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Caber\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\roblo\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"

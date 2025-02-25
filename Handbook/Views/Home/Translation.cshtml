@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Document Translation";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h2>Welcome to our document translation service!</h2>
+<p>Please submit a document in PDF form below and select your target language, and we can automatically translate it for you!</p>
+<form asp-action="UploadFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept="application/pdf" required />
+    <button type="submit">Upload PDF</button>
+</form>
