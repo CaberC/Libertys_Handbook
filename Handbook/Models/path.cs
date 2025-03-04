@@ -1,4 +1,4 @@
-namespace Program{
+namespace Handbook.Models{
     class Path{
         private string Title;
         protected Date Posted = new Date();

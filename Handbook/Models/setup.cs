@@ -3,7 +3,7 @@ sqlcmd -S LAPTOP-1EVATMPF\MSSQLSERVER01 -E
 **/
 using Microsoft.Data.SqlClient;
 
-namespace Program{
+namespace Handbook.Models{
 
     class Start{
         SqlConnection connection;

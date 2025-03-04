@@ -1,6 +1,6 @@
 using System;
 
-namespace Program{
+namespace Handbook.Models{
     struct Date{
         // A helperclass to format string to the proper date format
         // sql uses 1975-01-01 fomatting

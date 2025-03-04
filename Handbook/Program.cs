@@ -1,4 +1,4 @@
-namespace Program{
+namespace Handbook{
     class Program{
         static void Main(){
             Console.WriteLine("Enter program to run [sql or app]:");
@@ -43,10 +43,10 @@ namespace Program{
         }
 
        static void Sql(){
-            var conn = new Start();
+            var conn = new Models.Start();
             var str = conn.UseConn("SELECT * FROM path;");
             Console.WriteLine(str);
-            Path pat = new Path("","",0);
+            Models.Path pat = new Models.Path("","",0);
             Console.WriteLine(pat.Read(1));
             int id = pat.GetID();
             Console.WriteLine(id);

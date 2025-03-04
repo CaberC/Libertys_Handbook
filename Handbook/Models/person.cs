@@ -1,4 +1,4 @@
-namespace Program{
+namespace Handbook.Models{
     class Person{
         //string types is char[255] types in database
         private string UserName;
