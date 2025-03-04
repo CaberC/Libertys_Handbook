@@ -1,4 +1,3 @@
-using Microsoft.Data.SqlClient;
 namespace Program{
     class Person{
         //string types is char[255] types in database

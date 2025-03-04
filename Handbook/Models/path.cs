@@ -1,9 +1,5 @@
-
-using Microsoft.IdentityModel.Tokens;
-
 namespace Program{
     class Path{
-        private int ID;
         private string Title;
         protected Date Posted = new Date();
         private string PathStr;
@@ -16,8 +12,8 @@ namespace Program{
             this.PathStr = PathStr;
             try{
                 Start sqlConn = new Start();
-                string maxStr = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
-                if (maxStr.IsNullOrEmpty()){
+                string possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
+                if (string.IsNullOrEmpty(possibleID)){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
                     isPerson = true;
@@ -40,8 +36,8 @@ namespace Program{
         public void SetPersonID(int PersonID){
             try{
                 Start sqlConn = new Start();
-                string maxStr = sqlConn.UseConn("SELECT * FROM person WHERE ID = \'"+PersonID+"\';");
-                if (!maxStr.IsNullOrEmpty()){
+                string possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = \'"+PersonID+"\';");
+                if (string.IsNullOrEmpty(possibleID)){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
                     isPerson = true;
