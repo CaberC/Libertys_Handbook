@@ -113,6 +113,7 @@ namespace Program{
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
+                sqlConn.UseConn("DELETE FROM path WHERE PersonID = "+ID+";");
                 sqlConn.UseConn("DELETE FROM person WHERE ID = "+ID+" AND UserName = \'"+UserName+"\';");
                 return true;   
 

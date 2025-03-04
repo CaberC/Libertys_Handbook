@@ -46,8 +46,15 @@ namespace Program{
             var conn = new Start();
             var str = conn.UseConn("SELECT * FROM path;");
             Console.WriteLine(str);
-            Path pdf = new Path("Constitution",".\\data\\constitution.pdf",0);
-            if (pdf.Create()) Console.WriteLine("success");
+            Path pat = new Path("","",0);
+            Console.WriteLine(pat.Read(1));
+            int id = pat.GetID();
+            Console.WriteLine(id);
+            Console.WriteLine(pat.Delete(id));
+            Console.WriteLine(pat.Read(2));
+            id = pat.GetID();
+            Console.WriteLine(id);
+            Console.WriteLine(pat.Delete(id));
             str = conn.UseConn("SELECT * FROM path;");
             Console.WriteLine(str);
             

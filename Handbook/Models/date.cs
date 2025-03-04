@@ -15,7 +15,10 @@ namespace Program{
             int day = thisDay.Day;
             date = ""+year+"-"+month+"-"+day;
         }
-
+        public Date ToDate(string str){
+            date = str;
+            return this;
+        }
         public override string ToString()
         {
             return date;

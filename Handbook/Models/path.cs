@@ -5,7 +5,7 @@ namespace Program{
     class Path{
         private int ID;
         private string Title;
-        private Date Posted = new Date();
+        protected Date Posted = new Date();
         private string PathStr;
         private int PersonID;
         private bool isPerson = false;
@@ -17,7 +17,7 @@ namespace Program{
             try{
                 Start sqlConn = new Start();
                 string maxStr = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
-                if (!maxStr.IsNullOrEmpty()){
+                if (maxStr.IsNullOrEmpty()){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
                     isPerson = true;
@@ -80,6 +80,59 @@ namespace Program{
                     throw new Exception("NOT AN INTEGER "+maxStr);
                 }
                 return true;   
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        public int GetID(){
+            try{
+                Start sqlConn = new Start();
+                string str = sqlConn.UseConn("SELECT * FROM path WHERE Title = \'"+Title+"\' AND PersonID = \'"+PersonID+"\';");
+                string[] strArr = Start.SplitReader(str);
+                str = strArr[0];
+                int maxInt;
+                if (int.TryParse(str, out maxInt)){
+                    return maxInt;
+                }else{
+                    throw new Exception("NOT AN INTEGER "+str);
+                }   
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return -1;
+            }
+        }
+        public bool Read(int ID){
+            try{
+                Start sqlConn = new Start();
+                string str = sqlConn.UseConn("SELECT * FROM path WHERE ID = "+ID+";");
+                string[] strArr = Start.SplitReader(str);
+                Title = strArr[1];
+                Posted = Posted.ToDate(strArr[2]);
+                PathStr = strArr[3];
+                PersonID = int.Parse(strArr[4]);
+                return true;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        public bool Update(int ID){
+            try{
+                Start sqlConn = new Start();
+                sqlConn.UseConn("UPDATE path SET Title = \'"+Title+"\', Posted = \'"+Posted+"\', PathStr = \'"+PathStr+"\', PersonID = "+PersonID+" WHERE ID = "+ID+";");
+                return true;   
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        public bool Delete(int ID){
+            try{
+                Start sqlConn = new Start();
+                sqlConn.UseConn("DELETE FROM path WHERE ID = "+ID+" AND Title = \'"+Title+"\';");
+                return true;   
+
             }catch(Exception e){
                 Console.WriteLine(e);
                 return false;
