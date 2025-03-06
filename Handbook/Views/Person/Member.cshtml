@@ -1,0 +1,34 @@
+@{
+}
+<h1><%= Html.Encode(ViewData["Title"]) %></h1>
+
+<p>
+    Login on 
+    <%= Html.Encode(ViewData["day"]) %>
+    <hr>
+    <br />
+</p>
+<body>
+    <div>
+    
+    <% using (Html.BeginForm())
+       { %>
+
+        <label for="UserName">User Name:</label>
+        <br />
+        <%= Html.TextBox("UserName") %>
+        
+        <br /><br />
+            
+        <label for="Password">Password:</label>
+        <br />
+        <%= Html.Password("Password") %>
+        
+        <br /><br />
+
+        <input type="submit" value="Log in" />        
+    
+    <% } %>
+    
+    </div>
+</body>

@@ -11,7 +11,11 @@ namespace Handbook.Controllers{
             _logger = logger;
         }
         public IActionResult Member(){
-            return View();
+            ViewData["Title"] = "Member Page";
+            Models.Date day = new Date();
+            day.Today();
+            ViewData["Day"] = day.ToString();
+            return View("Memeber");
         }
     }
 }
