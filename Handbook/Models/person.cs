@@ -50,8 +50,8 @@ namespace Handbook.Models{
                     throw new Exception("UserName CANNOT BE NULL");
                 }
                 Start sqlConn = new Start();
-                string maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
-                string[] strArr = Start.SplitReader(maxStr);
+                string[] maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
+                string[] strArr = Start.SplitReader(maxStr[0]);
                 int maxInt;
                 if (int.TryParse(strArr[0], out maxInt)){
                     maxInt = maxInt+1;
@@ -68,9 +68,9 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string str = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';");
-                string[] strArr = Start.SplitReader(str);
-                str = strArr[0];
+                string[] strReader = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';");
+                string[] strArr = Start.SplitReader(strReader[0]);
+                string str = strArr[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
                     return maxInt;
@@ -85,8 +85,8 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string str = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";");
-                string[] strArr = Start.SplitReader(str);
+                string[] str = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";");
+                string[] strArr = Start.SplitReader(str[0]);
                 UserName = strArr[1];
                 Email = strArr[2];
                 Password = strArr[3];

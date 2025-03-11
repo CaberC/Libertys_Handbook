@@ -41,4 +41,15 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    public IActionResult Member()
+    {
+        
+        ViewData["Title"] = "Member Page";
+        Models.Date day = new Date();
+        day.Today();
+        ViewData["Day"] = day.ToString();
+        ViewData["body"]=PersonController.getUsers();
+        
+        return View(@"Person/Member");
+    }
 }

@@ -16,7 +16,7 @@ namespace Handbook.Models{
             var sql = "SELECT * FROM person;";
             Console.WriteLine(sql);
             try{
-                string str = UseConn(sql);
+                string[] str = UseConn(sql);
                 Console.WriteLine(str);
                 return true;
             }catch{
@@ -24,29 +24,31 @@ namespace Handbook.Models{
             }
                 
         }
-        public string ReadReader(SqlDataReader reader){
+        public string[] ReadReader(SqlDataReader reader){
             try{
                 string str = "";
+                string[] output = new string[0];
                 while (reader.Read()){
                     for (int i  = 0; i< reader.FieldCount; i++){
                         str=str+reader.GetName(i)+" : "+reader[i]+", ";
                     }
                     str=str+"\n";
+                    output = (string[])output.Append(str);
                 }
                 reader.Close();
-                return str;
+                return output;
             }catch (Exception e){
                 Console.WriteLine(e.ToString());
                 return null;
             }
         }
-        public string UseConn(string sql){
+        public string[] UseConn(string sql){
             try{
                 connection.Open();
 
                 var command = new SqlCommand(sql, connection);
                 var reader = command.ExecuteReader();
-                string str = ReadReader(reader);
+                string[] str = ReadReader(reader);
 
                 connection.Close();
                 return str;
