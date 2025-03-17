@@ -16,7 +16,7 @@ namespace Handbook.Models{
             var sql = "SELECT * FROM person;";
             Console.WriteLine(sql);
             try{
-                string[] str = UseConn(sql);
+                string[] str = UseConn(sql)[0];
                 Console.WriteLine(str);
                 return true;
             }catch{
@@ -24,16 +24,17 @@ namespace Handbook.Models{
             }
                 
         }
-        public string[] ReadReader(SqlDataReader reader){
+        public List<string[]> ReadReader(SqlDataReader reader){
             try{
-                string str = "";
-                string[] output = new string[0];
+                List<string[]> output = new List<string[]>();
                 while (reader.Read()){
+                    string[] row = new string[reader.FieldCount];
                     for (int i  = 0; i< reader.FieldCount; i++){
-                        str=str+reader.GetName(i)+" : "+reader[i]+", ";
+                        string str = "";
+                        str = str+reader[i];
+                        row[i]=str;
                     }
-                    str=str+"\n";
-                    output = (string[])output.Append(str);
+                    output.Add(row);
                 }
                 reader.Close();
                 return output;
@@ -42,37 +43,22 @@ namespace Handbook.Models{
                 return null;
             }
         }
-        public string[] UseConn(string sql){
+        public List<string[]> UseConn(string sql){
             try{
                 connection.Open();
 
                 var command = new SqlCommand(sql, connection);
                 var reader = command.ExecuteReader();
-                string[] str = ReadReader(reader);
+                Console.WriteLine(reader.RecordsAffected);
+                List<string[]> table = ReadReader(reader);
 
                 connection.Close();
-                return str;
+                return table; 
             }
             catch (Exception e)            {
                 Console.WriteLine(e.ToString());
                 return null;
             }
-        }
-        public static string[] SplitReader(string str){
-            string[] sub = str.Split(',');
-            string[] outStr = new string[sub.Length*2];
-
-            int i = 0;
-            foreach(string s in sub){
-                int index = s.IndexOf(" \n");
-                if (index>0) s.Remove(index);
-                index = s.IndexOf(':')+2;
-                string subStr = s.Substring(index);
-                outStr[i] = subStr;
-                i++;
-            }
-
-            return outStr;
         }
     }
 }

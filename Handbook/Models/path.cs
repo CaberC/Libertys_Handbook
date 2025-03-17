@@ -12,8 +12,8 @@ namespace Handbook.Models{
             this.PathStr = PathStr;
             try{
                 Start sqlConn = new Start();
-                string[] possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
-                if (string.IsNullOrEmpty(possibleID[0])){
+                List<string[]> possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
+                if (possibleID.Count!=1){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
                     isPerson = true;
@@ -36,8 +36,8 @@ namespace Handbook.Models{
         public void SetPersonID(int PersonID){
             try{
                 Start sqlConn = new Start();
-                string[] possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = \'"+PersonID+"\';");
-                if (string.IsNullOrEmpty(possibleID[0])){
+                List<string[]> possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = \'"+PersonID+"\';");
+                if (possibleID.Count!=1){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
                     isPerson = true;
@@ -66,14 +66,13 @@ namespace Handbook.Models{
                     throw new Exception("PersonID must exsist");
                 }
                 Start sqlConn = new Start();
-                string[] maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM path;");
-                string[] strArr = Start.SplitReader(maxStr[0]);
+                string[] strPath = sqlConn.UseConn("SELECT MAX(ID) FROM path;")[0];
                 int maxInt;
-                if (int.TryParse(strArr[0], out maxInt)){
+                if (int.TryParse(strPath[0], out maxInt)){
                     maxInt = maxInt+1;
                     sqlConn.UseConn("INSERT INTO path (ID, Title, Posted, PathStr, PersonID) VALUES ("+maxInt+", \'"+Title+"\', \'"+Posted.ToString()+"\', \'"+PathStr+"\', "+PersonID+");");
                 }else{
-                    throw new Exception("NOT AN INTEGER "+maxStr);
+                    throw new Exception("NOT AN INTEGER "+strPath[0]);
                 }
                 return true;   
             }catch(Exception e){
@@ -84,9 +83,8 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string[] strPath = sqlConn.UseConn("SELECT * FROM path WHERE Title = \'"+Title+"\' AND PersonID = \'"+PersonID+"\';");
-                string[] strArr = Start.SplitReader(strPath[0]);
-                string str = strArr[0];
+                string[] strPath = sqlConn.UseConn("SELECT * FROM path WHERE Title = \'"+Title+"\' AND PersonID = \'"+PersonID+"\';")[0];
+                string str = strPath[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
                     return maxInt;
@@ -101,8 +99,7 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string[] str = sqlConn.UseConn("SELECT * FROM path WHERE ID = "+ID+";");
-                string[] strArr = Start.SplitReader(str[0]);
+                string[] strArr = sqlConn.UseConn("SELECT * FROM path WHERE ID = "+ID+";")[0];
                 Title = strArr[1];
                 Posted = Posted.ToDate(strArr[2]);
                 PathStr = strArr[3];

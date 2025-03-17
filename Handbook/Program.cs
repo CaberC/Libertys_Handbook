@@ -44,20 +44,8 @@ namespace Handbook{
 
        static void Sql(){
             var conn = new Models.Start();
-            var str = conn.UseConn("SELECT * FROM path;");
-            Console.WriteLine(str);
-            Models.Path pat = new Models.Path("","",0);
-            Console.WriteLine(pat.Read(1));
-            int id = pat.GetID();
-            Console.WriteLine(id);
-            Console.WriteLine(pat.Delete(id));
-            Console.WriteLine(pat.Read(2));
-            id = pat.GetID();
-            Console.WriteLine(id);
-            Console.WriteLine(pat.Delete(id));
-            str = conn.UseConn("SELECT * FROM path;");
-            Console.WriteLine(str);
-            
+            List<string[]> strUser = conn.UseConn("SELECT * FROM person;");
+            Console.WriteLine(strUser.Count);
             
         }
     }

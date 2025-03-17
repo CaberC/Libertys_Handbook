@@ -50,14 +50,14 @@ namespace Handbook.Models{
                     throw new Exception("UserName CANNOT BE NULL");
                 }
                 Start sqlConn = new Start();
-                string[] maxStr = sqlConn.UseConn("SELECT MAX(ID) FROM person;");
-                string[] strArr = Start.SplitReader(maxStr[0]);
+                string[] strReader = sqlConn.UseConn("SELECT MAX(ID) FROM person;")[0];
+                string str = strReader[0];
                 int maxInt;
-                if (int.TryParse(strArr[0], out maxInt)){
+                if (int.TryParse(str, out maxInt)){
                     maxInt = maxInt+1;
                     sqlConn.UseConn("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+", \'"+UserName+"\', \'"+Email+"\', \'"+Password+"\', "+Zip+", "+Range+");");
                 }else{
-                    throw new Exception("NOT AN INTEGER "+maxStr);
+                    throw new Exception("NOT AN INTEGER "+str);
                 }
                 return true;   
             }catch(Exception e){
@@ -68,9 +68,8 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string[] strReader = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';");
-                string[] strArr = Start.SplitReader(strReader[0]);
-                string str = strArr[0];
+                string[] strReader = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';")[0];
+                string str = strReader[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
                     return maxInt;
@@ -85,8 +84,7 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string[] str = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";");
-                string[] strArr = Start.SplitReader(str[0]);
+                string[] strArr = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";")[0];
                 UserName = strArr[1];
                 Email = strArr[2];
                 Password = strArr[3];
