@@ -122,6 +122,7 @@ namespace Handbook.Models{
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
+                SavedResources.DeleteResource(ID);
                 sqlConn.UseConn("DELETE FROM resource WHERE ID = "+ID+" AND Title = \'"+Title+"\';");
                 return true;   
 

@@ -111,6 +111,7 @@ namespace Handbook.Models{
             try{
                 Start sqlConn = new Start();
                 sqlConn.UseConn("DELETE FROM path WHERE PersonID = "+ID+";");
+                SavedResources.DeletePerson(ID);
                 sqlConn.UseConn("DELETE FROM person WHERE ID = "+ID+" AND UserName = \'"+UserName+"\';");
                 return true;   
 
