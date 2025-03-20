@@ -2,36 +2,20 @@
 }
 
 <h1>@Html.Encode(ViewData["Title"])</h1>
-<p>@ViewData["body"]</p>
-<!--
-<p>
-    Login on 
-    <%= Html.Encode(ViewData["day"])>
-    <hr>
-    <br />
-</p>
-<body>
-    <div>
-    
-    <% using (Html.BeginForm())
-       { %>
+<br>
 
-        <label for="UserName">User Name:</label>
-        <br />
-        <%= Html.TextBox("UserName") /%>
-        
-        <br /><br />
-            
-        <label for="Password">Password:</label>
-        <br />
-        <%= Html.Password("Password") /%>
-        
-        <br /><br />
+<form method="post" action="/Home/MemberLogin">  
+    <label for="txtName">UserName:</label>  
+    <input type="text" id="txtName" name="UserName" />  
 
-        <input type="submit" value="Log in" />        
-    
-    <% } %>
-    
-    </div>
-</body>
--->
+    <label for="txtMail">Email:</label>  
+    <input type="text" id="txtMail" name="Email" />
+
+    <label for="txtWord">Passwrord:</label>  
+    <input type="text" id="txtWord" name="Password" />
+
+    <button type="submit">Submit</button>  
+
+</form>
+<br>
+<p>@Html.Encode(ViewData["body"])</p>
