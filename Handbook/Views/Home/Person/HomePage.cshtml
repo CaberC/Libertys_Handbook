@@ -1,5 +1,8 @@
 @{
 }
 <h1>@Html.Encode(ViewData["Title"])</h1>
+
+<!--@Html.ActionLink("Logout","MemberLogout", "HomeController")
+<input type="button" value="logout" onclick="location.href='<%: Url.Action("MemberLogout", "HomeController") %>'" />-->
 <br>
 <p>Welcome @Html.Encode(ViewData["UserName"]) on @Html.Encode(ViewData["Day"])</p>

@@ -1,3 +1,4 @@
+using Handbook.Controllers;
 using Handbook.Models;
 
 namespace Handbook{
@@ -39,8 +40,7 @@ namespace Handbook{
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
-
+            
             app.Run();
         }
 

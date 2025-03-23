@@ -3,7 +3,9 @@
 
 <h1>@Html.Encode(ViewData["Title"])</h1>
 <br>
-
+<form method="post" action="/Home/CreateUser">
+    <button type="submit">CreateUser</button>
+</form>
 <form method="post" action="/Home/MemberLogin">  
     <label for="txtName">UserName:</label>  
     <input type="text" id="txtName" name="UserName" />  

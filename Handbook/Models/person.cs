@@ -13,6 +13,20 @@ namespace Handbook.Models{
             this.Zip = Zip;
             this.Range = Range;
         }
+        public Person(int ID){
+            try{
+                UserName = null;
+                Email = null;
+                Password = null;
+                Zip = -1;
+                Range = -1f;
+                if(!Read(ID)){
+                    throw new Exception("NO USER FOUND WITH ID");
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+            }
+        }
         public void SetUserName(string UserName){
             this.UserName = UserName;
         }
