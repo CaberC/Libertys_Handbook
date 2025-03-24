@@ -19,7 +19,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return View(@"Index");
     }
 
     public IActionResult Privacy()
@@ -81,6 +81,7 @@ public class HomeController : Controller
                     //_cache.Set("UserID", ID);
                     Console.WriteLine("UserID "+ID);
                 }else{throw new Exception("invalid password");}
+                ViewData["ID"]=ID;
                 return View(@"Person/HomePage");
             }else{
                 throw new Exception("input login data");
@@ -98,6 +99,7 @@ public class HomeController : Controller
             day.Today();
             ViewData["Day"] = day.ToString();
             ViewData["UserName"]= PersonController.GetUserName(ID);
+            ViewData["ID"]=ID;
             return View(@"Person/HomePage");
         }catch(Exception e){
             ViewData["Body"]= "invalid login : "+e.ToString();
@@ -113,6 +115,7 @@ public class HomeController : Controller
         string UserName;
         string Email;
         string Password;
+        int ID;
         try{
             if(HttpContext.Request.Form["UserName"].IsNullOrEmpty() || HttpContext.Request.Form["Email"].IsNullOrEmpty() || HttpContext.Request.Form["Password"].IsNullOrEmpty()){
                 throw new Exception("FORM CANNOT BE BLANK");
@@ -127,7 +130,7 @@ public class HomeController : Controller
             if(!float.TryParse(HttpContext.Request.Form["Range"],out float Range)){
                 throw new Exception("RANGE NOT A FLOAT");
             }
-            if (!PersonController.CreateUser(UserName, Email, Password, Zip, Range)){
+            if (!PersonController.CreateUser(out ID, UserName, Email, Password, Zip, Range)){
                 throw new Exception("USERCREATE FAILED");
             }
         }catch(Exception e){
@@ -139,10 +142,32 @@ public class HomeController : Controller
         day.Today();
         ViewData["Day"] = day.ToString();
         ViewData["UserName"]= UserName;
+        ViewData["ID"]= ID;
         return View(@"Person/HomePage");
     }
     //public IActionResult MemberLogout(){
     //    _cache.Set("UserId", -1);
     //    return Member();
     //}
+    public IActionResult MemberDelete(){
+        try{
+            int ID = -1;
+            if(!HttpContext.Request.Form["UserName"].IsNullOrEmpty()){
+                if (int.TryParse(HttpContext.Request.Form["UserName"].ToString(), out ID)){
+                    if(ID != -1){
+                        PersonController.DeleteUser(ID);
+                        ViewData["Body"]= "Beep Boop Deleted";
+                        return View(@"Person/Member"); 
+                    }
+                }
+            }
+            throw new Exception("Error with UserID");
+        }catch (System.Exception e)
+        {
+            ViewData["Body"]= "Error with Deletion :"+e;
+            return View(@"Person/Member");
+        }
+
+        
+    }
 }

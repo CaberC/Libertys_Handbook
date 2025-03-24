@@ -10,8 +10,8 @@ class PersonController : Controller{
         string strOut= "";
         foreach(string[] str in strUser){
             strOut = strOut+str[1]+"_"+str[2]+"_"+str[3];
+            strOut = strOut+"\n";
         }
-        strOut = strOut+"\n";
         return strOut;
     }
     public static bool Login(string UserName, string Email, string Password, out int ID){
@@ -36,18 +36,30 @@ class PersonController : Controller{
         
     }
 
-    public static bool CreateUser(string UserName, string Email, string Password, int Zip, float Range){
+    public static bool CreateUser(out int ID, string UserName, string Email, string Password, int Zip, float Range){
         try{
             Person user = new Person(UserName, Email, Password, Zip, Range);
             if(!user.Create()){
                 throw new Exception("Create Failed");
             }else{
+                ID = user.GetID();
                 return true;
             }
         }catch(Exception e){
             Console.WriteLine(e);
+            ID = -1;
             return false;
         }
         
+    }
+    public static bool DeleteUser(int ID){
+        try{
+            Person user = new Person(ID);
+            user.Delete(ID);
+            return true;
+        }catch (System.Exception){
+            Console.WriteLine("Could not Delete");
+            return false;
+        }
     }
 }
