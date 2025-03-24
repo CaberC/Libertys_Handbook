@@ -1,24 +1,19 @@
-@{
-}
-
-<h1>@Html.Encode(ViewData["Title"])</h1>
-<br>
-<form method="post" action="/Home/NewUser">
-    <button type="submit">Create New User</button>
-</form>
-<hr>
-<form method="post" action="/Home/MemberLogin">  
+<h1>New Member Sign-Up</h1>
+<form method="post" action="/Home/MemberCreate">  
     <label for="txtName">UserName:</label>  
     <input type="text" id="txtName" name="UserName" />  
-
+    <br>   
     <label for="txtMail">Email:</label>  
     <input type="text" id="txtMail" name="Email" />
-
+    <br>
     <label for="txtWord">Passwrord:</label>  
     <input type="text" id="txtWord" name="Password" />
-
+    <br>
+    <label for="txtZip">Zip:</label>  
+    <input type="text" id="txtZip" name="Zip" />
+    <br>
+    <label for="txtRange">Distance:</label>  
+    <input type="text" id="txtRange" name="Range" />
     <button type="submit">Submit</button>  
 
 </form>
-<br>
-<p>@Html.Encode(ViewData["body"])</p>

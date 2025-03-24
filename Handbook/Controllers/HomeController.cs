@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Handbook.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Handbook.Controllers;
 
@@ -90,7 +91,7 @@ public class HomeController : Controller
         }
     }
     public IActionResult MemberLogin(int ID){
-        try{
+        try{            
             Console.WriteLine("Returning User");
             ViewData["Title"] = "HomePage";
             Models.Date day = new Date();
@@ -104,8 +105,41 @@ public class HomeController : Controller
         }
     }
     [HttpPost]
-    public IActionResult CreateUser(){
-
+    public IActionResult NewUser(){
+        return View(@"Person/NewMember");
+    }
+    [HttpPost]
+    public IActionResult MemberCreate(){
+        string UserName;
+        string Email;
+        string Password;
+        try{
+            if(HttpContext.Request.Form["UserName"].IsNullOrEmpty() || HttpContext.Request.Form["Email"].IsNullOrEmpty() || HttpContext.Request.Form["Password"].IsNullOrEmpty()){
+                throw new Exception("FORM CANNOT BE BLANK");
+            }else{
+                UserName = HttpContext.Request.Form["UserName"];
+                Email = HttpContext.Request.Form["Email"];
+                Password = HttpContext.Request.Form["Password"];
+            }
+            if(!int.TryParse(HttpContext.Request.Form["Zip"],out int Zip)){
+                throw new Exception("ZIP NOT AN INTEGER");
+            }
+            if(!float.TryParse(HttpContext.Request.Form["Range"],out float Range)){
+                throw new Exception("RANGE NOT A FLOAT");
+            }
+            if (!PersonController.CreateUser(UserName, Email, Password, Zip, Range)){
+                throw new Exception("USERCREATE FAILED");
+            }
+        }catch(Exception e){
+            ViewData["Body"]= "invalid login : "+e.ToString();
+            return View(@"Person/Member"); 
+        }
+        ViewData["Title"] = "HomePage";
+        Models.Date day = new Date();
+        day.Today();
+        ViewData["Day"] = day.ToString();
+        ViewData["UserName"]= UserName;
+        return View(@"Person/HomePage");
     }
     //public IActionResult MemberLogout(){
     //    _cache.Set("UserId", -1);

@@ -35,4 +35,19 @@ class PersonController : Controller{
         return user.GetUserName();
         
     }
+
+    public static bool CreateUser(string UserName, string Email, string Password, int Zip, float Range){
+        try{
+            Person user = new Person(UserName, Email, Password, Zip, Range);
+            if(!user.Create()){
+                throw new Exception("Create Failed");
+            }else{
+                return true;
+            }
+        }catch(Exception e){
+            Console.WriteLine(e);
+            return false;
+        }
+        
+    }
 }
