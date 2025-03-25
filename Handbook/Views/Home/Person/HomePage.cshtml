@@ -5,9 +5,9 @@
 <!--@Html.ActionLink("Logout","MemberLogout", "HomeController")
 <input type="button" value="logout" onclick="location.href='<%: Url.Action("MemberLogout", "HomeController") %>'" />-->
 <br>
-<p>Welcome @ViewData["ID"] @Html.Encode(ViewData["UserName"]) on @Html.Encode(ViewData["Day"])</p>
+<p>Welcome @ViewData["UserID"] @Html.Encode(ViewData["UserName"]) on @Html.Encode(ViewData["Day"])</p>
 <hr>
 <form method="post" action="/Home/MemberDelete">
     <button type="submit">Delete User?</button>
-    <input type="hidden" value=@ViewData["ID"] name="UserID" />
+    <input type="hidden" value=@ViewData["UserID"] name="UserID" />
 </form>

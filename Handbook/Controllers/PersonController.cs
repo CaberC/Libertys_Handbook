@@ -55,7 +55,9 @@ class PersonController : Controller{
     public static bool DeleteUser(int ID){
         try{
             Person user = new Person(ID);
-            user.Delete(ID);
+            if(!user.Delete(ID)){
+                throw new Exception();
+            }
             return true;
         }catch (System.Exception){
             Console.WriteLine("Could not Delete");

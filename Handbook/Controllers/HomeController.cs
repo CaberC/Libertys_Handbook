@@ -81,7 +81,7 @@ public class HomeController : Controller
                     //_cache.Set("UserID", ID);
                     Console.WriteLine("UserID "+ID);
                 }else{throw new Exception("invalid password");}
-                ViewData["ID"]=ID;
+                ViewData["UserID"]=ID;
                 return View(@"Person/HomePage");
             }else{
                 throw new Exception("input login data");
@@ -99,7 +99,7 @@ public class HomeController : Controller
             day.Today();
             ViewData["Day"] = day.ToString();
             ViewData["UserName"]= PersonController.GetUserName(ID);
-            ViewData["ID"]=ID;
+            ViewData["UserID"]=ID;
             return View(@"Person/HomePage");
         }catch(Exception e){
             ViewData["Body"]= "invalid login : "+e.ToString();
@@ -142,18 +142,19 @@ public class HomeController : Controller
         day.Today();
         ViewData["Day"] = day.ToString();
         ViewData["UserName"]= UserName;
-        ViewData["ID"]= ID;
+        ViewData["UserID"]= ID;
         return View(@"Person/HomePage");
     }
     //public IActionResult MemberLogout(){
-    //    _cache.Set("UserId", -1);
+    //    _cache.Set("UserID", -1);
     //    return Member();
     //}
     public IActionResult MemberDelete(){
         try{
             int ID = -1;
-            if(!HttpContext.Request.Form["UserName"].IsNullOrEmpty()){
-                if (int.TryParse(HttpContext.Request.Form["UserName"].ToString(), out ID)){
+            if(!HttpContext.Request.Form["UserID"].IsNullOrEmpty()){
+                string str = HttpContext.Request.Form["UserID"].ToString();
+                if (int.TryParse(str, out ID)){
                     if(ID != -1){
                         PersonController.DeleteUser(ID);
                         ViewData["Body"]= "Beep Boop Deleted";

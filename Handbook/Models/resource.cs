@@ -108,6 +108,12 @@ namespace Handbook.Models{
                 return false;
             }
         }
+        public static List<string[]> GetResources(int Offset, int Rows){
+            var conn = new Models.Start();
+            List<string[]> listRes = conn.UseConn("SELECT * FROM savedresources ORDER BY Zip OFFSET "+Offset+" ROWS FETCH NEXT "+Rows+" ROWS;");
+            return listRes;
+            
+        }
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
