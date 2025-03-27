@@ -46,22 +46,14 @@ namespace Handbook{
 
        static void Sql(){
             var conn = new Models.Start();
-            List<string[]> strUser = conn.UseConn("SELECT * FROM savedresources;");
+            List<string[]> strUser = conn.UseConn("SELECT * FROM resource ORDER BY Zip OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY;");
             foreach(string[] row in strUser){
                 foreach(string str in row){
                     Console.Write(str+"_");
                 }
                 Console.WriteLine();
             }
-            SavedResources.Create(0,0);
-            SavedResources.Create(0,1);
-            strUser = conn.UseConn("SELECT * FROM savedresources;");
-            foreach(string[] row in strUser){
-                foreach(string str in row){
-                    Console.Write(str+"_");
-                }
-                Console.WriteLine();
-            }
+            
         }
     }
 }

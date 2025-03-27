@@ -168,7 +168,11 @@ public class HomeController : Controller
             ViewData["Body"]= "Error with Deletion :"+e;
             return View(@"Person/Member");
         }
+    }
+    public IActionResult ResourceBatch(){
+        ViewBag.resource  = ResourceController.GetResources(0,5);
+        ViewBag.loadBool = true;
+        return View(@"Database");
 
-        
     }
 }

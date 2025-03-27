@@ -5,4 +5,26 @@
 <h1>@ViewData["Title"]</h1>
 
 <h2>Welcome to our resources database service!</h2>
-<p>TODO: put stuff here</p>
+<form method="post" action="/Home/ResourceBatch">
+    <button type="submit">Load Resources</button>
+</form>
+<hr>
+@{
+    try{
+        if(ViewBag.loadBool){
+            List<string[]> list = ViewBag.resource;
+            foreach(string[] strings in list){
+                <div style="border:solid">
+                    <h2>@strings[1]</h2><p>@strings[3]</p>
+                    <br>
+                    <p>@strings[5]</p>
+                </div>
+            }
+            
+        }
+    }catch(Exception e){
+        Console.WriteLine(e);
+    }
+    
+}
+

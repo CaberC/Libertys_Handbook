@@ -110,7 +110,7 @@ namespace Handbook.Models{
         }
         public static List<string[]> GetResources(int Offset, int Rows){
             var conn = new Models.Start();
-            List<string[]> listRes = conn.UseConn("SELECT * FROM savedresources ORDER BY Zip OFFSET "+Offset+" ROWS FETCH NEXT "+Rows+" ROWS;");
+            List<string[]> listRes = conn.UseConn("SELECT * FROM resource ORDER BY Zip OFFSET "+Offset+" ROWS FETCH NEXT "+Rows+" ROWS ONLY;");
             return listRes;
             
         }
