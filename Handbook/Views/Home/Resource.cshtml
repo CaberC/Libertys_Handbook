@@ -1,2 +1,7 @@
-<h1>Hello World</h1>
-<h2>resources...</h2>
+@model Handbook.Models.Resource;
+<h1>@Model.GetTitle()</h1>
+<h2>@Model.GetProvider()</h2>
+<hr>
+<p>@Model.GetDetails()</p>
+<hr>
+<p>Cat: @Model.GetCategory() At: @Model.GetZip()</p>

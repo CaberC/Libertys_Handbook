@@ -175,4 +175,23 @@ public class HomeController : Controller
         return View(@"Database");
 
     }
+
+    [HttpPost]
+    public IActionResult ResourcePage(){
+        try{
+            if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
+                //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+                Resource res = ResourceController.Read((string)HttpContext.Request.Form["ResourceID"]);
+                if(res != null){return View(@"Resource", res);}
+                else{throw new Exception();}
+            }else{throw new Exception();}
+        }
+        catch (System.Exception)
+        {
+            return View(@"404");
+        }
+        
+        
+
+    }
 }

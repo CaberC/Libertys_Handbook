@@ -13,6 +13,24 @@ namespace Handbook.Models{
             this.Zip = Zip;
             this.Details = Details;
         }
+        public Resource(string strID){
+            this.Title = "";
+            this.Category = -1;
+            this.Provider = "";
+            this.Zip = -1;
+            this.Details = "";
+            try{
+                if(int.TryParse(strID,out int ID)){
+                    if (!Read(ID)){
+                        throw new Exception("NO RESOURCE FOUND WITH ID");
+                    }
+                }else{
+                    throw new Exception("NOT AN ID ENTER AN INT");
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+            }
+        }
         public void SetTitle(string Title){
             this.Title = Title;
         }
