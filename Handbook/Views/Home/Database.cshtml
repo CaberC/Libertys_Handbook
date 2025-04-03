@@ -9,7 +9,7 @@
     <button type="submit">Load Resources</button>
 </form>
 <hr>
-<img src="..\..\data\imgs\tsb_new_logo_registered_tm.png" alt=" It didn't work.">
+<img src="\Handbook\data\imgs\tsb_new_logo_registered_tm.png" alt=" It didn't work.">
 @{
     try{
         if(ViewBag.loadBool){
@@ -18,7 +18,7 @@
                 <div style="border:solid;">
                     <form method="post" style="float:left;">
                         <input type="hidden" id="ResourceID" name="ResourceID" value=@strings[0]/>
-                        <input type="image" src="~\Handbook\data\imgs\tsb_new_logo_registered_tm.png" alt="Or Click Me" asp-controller="Home" asp-action="ResourcePage">
+                        <input type="image" src="Handbook\data\imgs\tsb_new_logo_registered_tm.png" alt="Or Click Me" asp-controller="Home" asp-action="ResourcePage">
                     </form>
 
                     <h2>@strings[1]</h2><p>@strings[3]</p>

@@ -3,5 +3,10 @@
 <h2>@Model.GetProvider()</h2>
 <hr>
 <p>@Model.GetDetails()</p>
-<hr>
+<br>
 <p>Cat: @Model.GetCategory() At: @Model.GetZip()</p>
+<hr>
+<form method="post" action="/Home/EditResource">
+    <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()"/>
+    <button type="submit">Edit  Resource</button>  
+</form>

@@ -19,4 +19,17 @@ class ResourceController : Controller{
             return null;
         }
     }
+    public static Resource Update(string ID){
+        try{
+            if (ID.EndsWith('/')){
+                ID=ID.TrimEnd('/');
+            }
+            Resource res = new Resource(ID);
+            return res;
+        }
+        catch (Exception e){
+            Console.WriteLine(e);
+            return null;
+        }
+    }
 }

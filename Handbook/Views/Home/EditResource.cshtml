@@ -1,0 +1,28 @@
+@model Handbook.Models.Resource;
+<h1>@Model.GetTitle()</h1>
+<h2>@Model.GetProvider()</h2>
+<hr>
+<p>@Model.GetDetails()</p>
+<br>
+<p>Cat: @Model.GetCategory() At: @Model.GetZip()</p>
+<hr>
+<form method="post" action="/Home/UpdateResource">
+    <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()"/>
+    <label for="txtName">Title:</label> 
+    <br> 
+    <input type="text" id="txtTitle" name="Title" value="@Model.GetTitle()"/>  
+    <br>   
+    <label for="txtMail">Category:</label> 
+    <br>
+    <input type="text" id="txtCategory" name="Category" value="@Model.GetCategory()"/>
+    <br>
+    <label for="txtZip">Zip:</label>  
+    <br>
+    <input type="text" id="txtZip" name="Zip" value="@Model.GetZip()"/>
+    <br>
+    <label for="txtWord">Provider:</label>  
+    <br>
+    <input type="text" id="txtProvider" name="Provider" value="@Model.GetProvider()"/>
+    <br>
+    <button type="submit">Update</button>
+</form>

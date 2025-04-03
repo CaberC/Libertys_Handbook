@@ -190,8 +190,45 @@ public class HomeController : Controller
         {
             return View(@"404");
         }
-        
-        
+    }
+    [HttpPost]
+    public IActionResult EditResource(){
+        try{
+             if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
+                //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+                Resource res = ResourceController.Read((string)HttpContext.Request.Form["ResourceID"]);
+                if(res != null){return View(@"EditResource", res);}
+                else{throw new Exception();}
+            }else{throw new Exception();}
+        }
+        catch (System.Exception)
+        {
+            return View(@"404");
+        }
+    }
+    [HttpPost]
+    public IActionResult UpdateResource(){
+        try{
+            if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
+                //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+                Resource res = ResourceController.Read((string)HttpContext.Request.Form["ResourceID"]);
+                if(res==null){throw new Exception();}
+                res.SetTitle((string)HttpContext.Request.Form["Title"]);
+                int.TryParse((string)HttpContext.Request.Form["Category"], out int cat);
+                res.SetCategory(cat);
+                int.TryParse((string)HttpContext.Request.Form["Zip"], out int Zip);
+                res.SetZip(Zip);
+                res.SetProvider((string)HttpContext.Request.Form["Provider"]);
+                res.SetDetails((string)HttpContext.Request.Form["Details"]);
+                int.TryParse((string)HttpContext.Request.Form["ResourceID"], out int ID);
+                if(!res.Update(ID)){throw new Exception();}
+                return View(@"Resource", res);
+            }else{throw new Exception();}
 
+        }
+        catch (System.Exception)
+        {
+            return View(@"404");
+        }
     }
 }
