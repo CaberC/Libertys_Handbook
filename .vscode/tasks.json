@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\Handbook.csproj",
+			"file": "C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\Handbook.csproj",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "dotnet: build C:\\Users\\Caber\\Documents\\_Capstone\\Libertys_Handbook\\Handbook\\Handbook.csproj"
+		}
+	]
+}

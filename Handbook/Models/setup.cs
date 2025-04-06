@@ -49,9 +49,8 @@ namespace Handbook.Models{
 
                 var command = new SqlCommand(sql, connection);
                 var reader = command.ExecuteReader();
-                Console.WriteLine(reader.RecordsAffected);
+                Console.WriteLine(reader.RecordsAffected+" : "+sql);
                 List<string[]> table = ReadReader(reader);
-
                 connection.Close();
                 return table; 
             }

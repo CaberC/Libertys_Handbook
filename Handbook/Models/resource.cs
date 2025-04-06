@@ -31,7 +31,7 @@ namespace Handbook.Models{
                 Console.WriteLine(e);
             }
         }
-        public void SetTitle(string Title){
+        private void SetTitle(string Title){
             this.Title = Title;
         }
         public void SetCategory(int Category){
@@ -40,7 +40,7 @@ namespace Handbook.Models{
         public void SetProvider(string Provider){
             this.Provider = Provider;
         }
-        public void SetZip(int Zip){
+        private void SetZip(int Zip){
             this.Zip = Zip;
         }
         public void SetDetails(string Details){
@@ -69,11 +69,15 @@ namespace Handbook.Models{
                 }
                 Start sqlConn = new Start();
                 string[] strReader = sqlConn.UseConn("SELECT MAX(ID) FROM resource;")[0];
+                int rows = Resource.CheckAvaialability(Title, Zip);
                 string str = strReader[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
                     maxInt = maxInt+1;
-                    sqlConn.UseConn("INSERT INTO resource (ID, Title, Category, Zip, Provider, Details) VALUES ("+maxInt+", \'"+Title+"\', "+Category+", "+Zip+", \'"+Provider+"\', \'"+Details+"\');");
+                    if(rows!=0){
+                        throw new Exception("TITLES MUST BE UNIQUE IN EACH ZIP CODE");
+                    }
+                    var val = sqlConn.UseConn("INSERT INTO resource (ID, Title, Category, Zip, Provider, Details) VALUES ("+maxInt+", \'"+Title+"\', "+Category+", "+Zip+", \'"+Provider+"\', \'"+Details+"\');");
                 }else{
                     throw new Exception("NOT AN INTEGER "+str);
                 }
@@ -96,7 +100,7 @@ namespace Handbook.Models{
                 }   
             }catch(Exception e){
                 Console.WriteLine(e);
-                return -1;
+                return -1; 
             }
         }
         public bool Read(int ID){
@@ -135,8 +139,13 @@ namespace Handbook.Models{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("UPDATE resource SET Title = \'"+Title+"\', Category = "+Category+", Zip = "+Zip+", Provider = \'"+Provider+"\', Details = \'"+Details+"\' WHERE ID = "+ID+";");
-                return true;   
+                if (Resource.CheckAvaialability(Title, Zip)==1){
+                    sqlConn.UseConn("UPDATE resource SET Category = "+Category+", Provider = \'"+Provider+"\', Details = \'"+Details+"\' WHERE ID = "+ID+";");
+                    return true;
+                }else{
+                    return false;
+                }
+                   
             }catch(Exception e){
                 Console.WriteLine(e);
                 return false;
@@ -156,5 +165,19 @@ namespace Handbook.Models{
             }
         }
         
+        private static int CheckAvaialability(string Title, int Zip){
+            try{
+                Start sqlConn = new Start();
+                List<string[]> rows = sqlConn.UseConn("SELECT * FROM resource WHERE Title = \'"+Title+"\' AND ZIP = "+Zip+";");
+                if (rows == null){
+                    return -1;
+                }
+                return rows.Count();   
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return -1;
+            }
+        }
     }
 }

@@ -211,24 +211,46 @@ public class HomeController : Controller
         try{
             if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
                 //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
-                Resource res = ResourceController.Read((string)HttpContext.Request.Form["ResourceID"]);
-                if(res==null){throw new Exception();}
-                res.SetTitle((string)HttpContext.Request.Form["Title"]);
-                int.TryParse((string)HttpContext.Request.Form["Category"], out int cat);
-                res.SetCategory(cat);
-                int.TryParse((string)HttpContext.Request.Form["Zip"], out int Zip);
-                res.SetZip(Zip);
-                res.SetProvider((string)HttpContext.Request.Form["Provider"]);
-                res.SetDetails((string)HttpContext.Request.Form["Details"]);
-                int.TryParse((string)HttpContext.Request.Form["ResourceID"], out int ID);
-                if(!res.Update(ID)){throw new Exception();}
+                string[] Args = new string[4];
+                Args[0] = HttpContext.Request.Form["ResourceID"];
+                Args[1] = HttpContext.Request.Form["Category"];
+                Args[2] = HttpContext.Request.Form["Provider"];
+                Args[3] = HttpContext.Request.Form["Details"];
+                Resource res = ResourceController.Update(Args);
+                if(res==null){throw new Exception("Update Failed");}
                 return View(@"Resource", res);
             }else{throw new Exception();}
-
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            ViewData["Exception"] = e.Message;
             return View(@"404");
         }
+    }
+    [HttpPost]
+    public IActionResult CreateResource(){
+        try{
+            if(!HttpContext.Request.Form["Title"].IsNullOrEmpty() && !HttpContext.Request.Form["Zip"].IsNullOrEmpty()){
+                //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+                string[] Args = new string[5];
+                Args[0] = HttpContext.Request.Form["Title"];
+                Args[1] = HttpContext.Request.Form["Category"];
+                Args[2] = HttpContext.Request.Form["Zip"];
+                Args[3] = HttpContext.Request.Form["Provider"];
+                Args[4] = HttpContext.Request.Form["Details"];
+                Resource res = ResourceController.Create(Args);
+                if(res==null){throw new Exception("Create Failed");}
+                return View(@"Resource", res);
+            }else{throw new Exception("Forms must be populated");}
+
+        }
+        catch (System.Exception e)
+        {
+            ViewData["Exception"] = e.Message;
+            return View(@"404");
+        }
+    }
+    public IActionResult toCreateResource(){
+        return View(@"CreateResources");
     }
 }

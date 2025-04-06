@@ -8,21 +8,19 @@
 <hr>
 <form method="post" action="/Home/UpdateResource">
     <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()"/>
-    <label for="txtName">Title:</label> 
-    <br> 
-    <input type="text" id="txtTitle" name="Title" value="@Model.GetTitle()"/>  
+    <p>Title & Zip: Cannot be changed after creation.<p> 
     <br>   
     <label for="txtMail">Category:</label> 
     <br>
     <input type="text" id="txtCategory" name="Category" value="@Model.GetCategory()"/>
     <br>
-    <label for="txtZip">Zip:</label>  
-    <br>
-    <input type="text" id="txtZip" name="Zip" value="@Model.GetZip()"/>
-    <br>
-    <label for="txtWord">Provider:</label>  
+    <label for="txtProvider">Provider:</label>  
     <br>
     <input type="text" id="txtProvider" name="Provider" value="@Model.GetProvider()"/>
+    <br>
+    <label for="txtDetails">Details:</label>  
+    <br>
+    <input type="text" id="txtDetails" name="Details" value="@Model.GetDetails()"/>
     <br>
     <button type="submit">Update</button>
 </form>
