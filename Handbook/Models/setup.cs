@@ -1,12 +1,15 @@
 /**
 sqlcmd -S LAPTOP-1EVATMPF\MSSQLSERVER01 -E
 **/
+using System.Data;
 using Microsoft.Data.SqlClient;
+using Models;
 
 namespace Handbook.Models{
 
     class Start{
-        SqlConnection connection;
+        private SqlConnection connection;
+        private List<SQLParameter> parameters = new List<SQLParameter>();
         public Start(){
             connection = new SqlConnection("Server=localhost\\MSSQLSERVER01;Database=master;Trusted_Connection=True;TrustServerCertificate=True;");
         }
@@ -58,6 +61,32 @@ namespace Handbook.Models{
                 Console.WriteLine(e.ToString());
                 return null;
             }
+        }
+        public List<string[]> UseParam(string sql){
+            try{
+                connection.Open();
+
+                var command = new SqlCommand(sql, connection);
+                foreach (SQLParameter p in parameters)
+                {
+                    command.Parameters.Add(p.key, p.type);
+                    command.Parameters[p.key].Value = p.value;
+                }
+                var reader = command.ExecuteReader();
+                Console.WriteLine(reader.RecordsAffected+" : "+sql);
+                List<string[]> table = ReadReader(reader);
+                connection.Close();
+                parameters.Clear();
+                return table; 
+            }
+            catch (Exception e)            {
+                Console.WriteLine(e.ToString());
+                return null;
+            }
+        }
+
+        public void addParam(string key, SqlDbType type, object? value){
+            parameters.Add(new SQLParameter(key, type, value));
         }
     }
 }

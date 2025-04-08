@@ -14,7 +14,7 @@
 
 @{
     try{
-        if(ViewBag.loadBool){
+        if(ViewBag!= null && ViewBag.loadBool){
             List<string[]> list = ViewBag.resource;
             foreach(string[] strings in list){
                 <div style="border:solid;">

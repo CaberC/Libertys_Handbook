@@ -77,7 +77,14 @@ namespace Handbook.Models{
                     if(rows!=0){
                         throw new Exception("TITLES MUST BE UNIQUE IN EACH ZIP CODE");
                     }
-                    var val = sqlConn.UseConn("INSERT INTO resource (ID, Title, Category, Zip, Provider, Details) VALUES ("+maxInt+", \'"+Title+"\', "+Category+", "+Zip+", \'"+Provider+"\', \'"+Details+"\');");
+                    sqlConn.addParam("@ID", System.Data.SqlDbType.Int, maxInt);
+                    sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                    sqlConn.addParam("@Category", System.Data.SqlDbType.VarChar, Category);
+                    sqlConn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                    sqlConn.addParam("@Provider", System.Data.SqlDbType.VarChar, Provider);
+                    sqlConn.addParam("@Details", System.Data.SqlDbType.VarChar, Details);
+                    var val = sqlConn.UseParam("INSERT INTO resource (ID, Title, Category, Zip, Provider, Details)"+ 
+                        "VALUES (@ID, @Title, @Category, @Zip, @Provider, @Details);");
                 }else{
                     throw new Exception("NOT AN INTEGER "+str);
                 }
@@ -168,7 +175,9 @@ namespace Handbook.Models{
         private static int CheckAvaialability(string Title, int Zip){
             try{
                 Start sqlConn = new Start();
-                List<string[]> rows = sqlConn.UseConn("SELECT * FROM resource WHERE Title = \'"+Title+"\' AND ZIP = "+Zip+";");
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                List<string[]> rows = sqlConn.UseParam("SELECT * FROM resource WHERE Title = @Title AND ZIP = @Zip;");
                 if (rows == null){
                     return -1;
                 }
