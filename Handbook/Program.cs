@@ -49,12 +49,13 @@ namespace Handbook{
         }
 
        static void Sql(){
+            /*
             Resource res = new Resource("The HRDC", 2, 59715, "The HRDC", "Welcome to HRDC, where you’ll find us working to improve our neighbors’ lives by building a better community in Southwest Montana. We invite you to become part of our HRDC family whether you need help or are able to provide help. https://thehrdc.org/");
             if (res.Create()){
                 Console.WriteLine("tada");
             }
+            */
 
-            /*
             var conn = new Models.Start();
             var id = "%"+"a"+"%";
             conn.addParam("@Title", System.Data.SqlDbType.VarChar, id);
@@ -66,7 +67,7 @@ namespace Handbook{
                 }
                 Console.WriteLine();
             }
-            */
+            
         }
     }
 }

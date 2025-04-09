@@ -12,7 +12,8 @@ namespace Handbook.Models{
             this.PathStr = PathStr;
             try{
                 Start sqlConn = new Start();
-                List<string[]> possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+PersonID+";");
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                List<string[]> possibleID = sqlConn.UseParam("SELECT * FROM person WHERE ID = @PersonID;");
                 if (possibleID.Count!=1){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
@@ -36,7 +37,8 @@ namespace Handbook.Models{
         public void SetPersonID(int PersonID){
             try{
                 Start sqlConn = new Start();
-                List<string[]> possibleID = sqlConn.UseConn("SELECT * FROM person WHERE ID = \'"+PersonID+"\';");
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                List<string[]> possibleID = sqlConn.UseParam("SELECT * FROM person WHERE ID = @PersonID;");
                 if (possibleID.Count!=1){
                     throw new Exception("NO PERSON FOUND WITH THAT ID");
                 }else{
@@ -70,7 +72,10 @@ namespace Handbook.Models{
                 int maxInt;
                 if (int.TryParse(strPath[0], out maxInt)){
                     maxInt = maxInt+1;
-                    sqlConn.UseConn("INSERT INTO path (ID, Title, Posted, PathStr, PersonID) VALUES ("+maxInt+", \'"+Title+"\', \'"+Posted.ToString()+"\', \'"+PathStr+"\', "+PersonID+");");
+                    sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                    sqlConn.addParam("@PathStr", System.Data.SqlDbType.VarChar, PathStr);
+                    sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                    sqlConn.UseParam("INSERT INTO path (ID, Title, Posted, PathStr, PersonID) VALUES ("+maxInt+", @Title, \'"+Posted.ToString()+"\', @PathStr, @PersonID);");
                 }else{
                     throw new Exception("NOT AN INTEGER "+strPath[0]);
                 }
@@ -83,7 +88,9 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string[] strPath = sqlConn.UseConn("SELECT * FROM path WHERE Title = \'"+Title+"\' AND PersonID = \'"+PersonID+"\';")[0];
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                string[] strPath = sqlConn.UseParam("SELECT * FROM path WHERE Title = @Title AND PersonID = @PersonID;")[0];
                 string str = strPath[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
@@ -99,7 +106,8 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string[] strArr = sqlConn.UseConn("SELECT * FROM path WHERE ID = "+ID+";")[0];
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                string[] strArr = sqlConn.UseParam("SELECT * FROM path WHERE ID = @ID;")[0];
                 Title = strArr[1];
                 Posted = Posted.ToDate(strArr[2]);
                 PathStr = strArr[3];
@@ -113,7 +121,11 @@ namespace Handbook.Models{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("UPDATE path SET Title = \'"+Title+"\', Posted = \'"+Posted+"\', PathStr = \'"+PathStr+"\', PersonID = "+PersonID+" WHERE ID = "+ID+";");
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.addParam("@PathStr", System.Data.SqlDbType.VarChar, PathStr);
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                sqlConn.UseParam("UPDATE path SET Title = @Title, Posted = \'"+Posted+"\', PathStr = @PathStr, PersonID = @PersonID WHERE ID = @ID;");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -123,7 +135,21 @@ namespace Handbook.Models{
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("DELETE FROM path WHERE ID = "+ID+" AND Title = \'"+Title+"\';");
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.UseParam("DELETE FROM path WHERE ID = @ID AND Title = @Title;");
+                return true;   
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        public static bool DeletePerson(int PersonID){
+            try{
+                Start sqlConn = new Start();
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                sqlConn.UseParam("DELETE FROM path WHERE PersonID = @PersonID;");
                 return true;   
 
             }catch(Exception e){

@@ -3,7 +3,9 @@ namespace Handbook.Models{
         public static bool Create(int PersonID, int ResourceID ){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("INSERT INTO savedresources (PersonID, ResourceID) VALUES ("+PersonID+","+ResourceID+");");
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                sqlConn.addParam("@ResourceID", System.Data.SqlDbType.Int, ResourceID);
+                sqlConn.UseParam("INSERT INTO savedresources (PersonID, ResourceID) VALUES (@PersonID, @ResourceID);");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -13,7 +15,8 @@ namespace Handbook.Models{
         public static List<string[]> Read(int PersonID){
             try{
                 Start sqlConn = new Start();
-                List<string[]> outList = sqlConn.UseConn("SELECT * FROM savedresources WHERE PersonID ="+PersonID+";");
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                List<string[]> outList = sqlConn.UseParam("SELECT * FROM savedresources WHERE PersonID = @PersonID;");
                 return outList;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -24,7 +27,8 @@ namespace Handbook.Models{
         public static bool DeletePerson(int PersonID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("DELETE FROM savedresources WHERE PersonID = "+PersonID+";");
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                sqlConn.UseParam("DELETE FROM savedresources WHERE PersonID = @PersonID;");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -34,7 +38,8 @@ namespace Handbook.Models{
         public static bool DeleteResource(int ResourceID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("DELETE FROM savedresources WHERE ResourceID = "+ResourceID+";");
+                sqlConn.addParam("@ResourceID", System.Data.SqlDbType.Int, ResourceID);
+                sqlConn.UseParam("DELETE FROM savedresources WHERE ResourceID = @ResourceID;");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);

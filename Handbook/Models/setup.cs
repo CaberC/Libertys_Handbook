@@ -40,6 +40,7 @@ namespace Handbook.Models{
                     output.Add(row);
                 }
                 reader.Close();
+                
                 return output;
             }catch (Exception e){
                 Console.WriteLine(e.ToString());
@@ -54,7 +55,9 @@ namespace Handbook.Models{
                 var reader = command.ExecuteReader();
                 Console.WriteLine(reader.RecordsAffected+" : "+sql);
                 List<string[]> table = ReadReader(reader);
+                parameters.Clear();
                 connection.Close();
+
                 return table; 
             }
             catch (Exception e)            {
@@ -79,7 +82,8 @@ namespace Handbook.Models{
                 parameters.Clear();
                 return table; 
             }
-            catch (Exception e)            {
+            catch (Exception e){
+                parameters.Clear();
                 Console.WriteLine(e.ToString());
                 return null;
             }

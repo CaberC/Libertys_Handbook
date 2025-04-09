@@ -97,7 +97,9 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string[] strReader = sqlConn.UseConn("SELECT * FROM resource WHERE Title = \'"+Title+"\' AND Zip= "+Zip+";")[0];
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                string[] strReader = sqlConn.UseParam("SELECT * FROM resource WHERE Title = @Title AND Zip= @Zip;")[0];
                 string str = strReader[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
@@ -113,7 +115,8 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string[] strArr = sqlConn.UseConn("SELECT * FROM resource WHERE ID = "+ID+";")[0];
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                string[] strArr = sqlConn.UseParam("SELECT * FROM resource WHERE ID = @ID;")[0];
                 Title = strArr[1];
                 string str = strArr[2];
                 int cat;
@@ -138,16 +141,22 @@ namespace Handbook.Models{
             }
         }
         public static List<string[]> GetResources(int Offset, int Rows){
-            var conn = new Models.Start();
-            List<string[]> listRes = conn.UseConn("SELECT * FROM resource ORDER BY Zip OFFSET "+Offset+" ROWS FETCH NEXT "+Rows+" ROWS ONLY;");
+            var sqlConn = new Models.Start();
+            sqlConn.addParam("@Offset", System.Data.SqlDbType.Int, Offset);
+            sqlConn.addParam("@Rows", System.Data.SqlDbType.Int, Rows);
+            List<string[]> listRes = sqlConn.UseParam("SELECT * FROM resource ORDER BY Zip OFFSET @Offset ROWS FETCH NEXT @Rows ROWS ONLY;");
             return listRes;
-            
         }
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
+                
                 if (Resource.CheckAvaialability(Title, Zip)==1){
-                    sqlConn.UseConn("UPDATE resource SET Category = "+Category+", Provider = \'"+Provider+"\', Details = \'"+Details+"\' WHERE ID = "+ID+";");
+                    sqlConn.addParam("@Category", System.Data.SqlDbType.VarChar, Category);
+                    sqlConn.addParam("@Provider", System.Data.SqlDbType.VarChar, Provider);
+                    sqlConn.addParam("@Details", System.Data.SqlDbType.VarChar, Details);
+                    sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                    sqlConn.UseParam("UPDATE resource SET Category = @Category, Provider = @Provider, Details = @Details WHERE ID = @ID;");
                     return true;
                 }else{
                     return false;
@@ -163,7 +172,9 @@ namespace Handbook.Models{
             try{
                 Start sqlConn = new Start();
                 SavedResources.DeleteResource(ID);
-                sqlConn.UseConn("DELETE FROM resource WHERE ID = "+ID+" AND Title = \'"+Title+"\';");
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                sqlConn.addParam("@Title", System.Data.SqlDbType.VarChar, Title);
+                sqlConn.UseParam("DELETE FROM resource WHERE ID = @ID AND Title = @Title;");
                 return true;   
 
             }catch(Exception e){

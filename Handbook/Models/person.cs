@@ -69,7 +69,12 @@ namespace Handbook.Models{
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
                     maxInt = maxInt+1;
-                    sqlConn.UseConn("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+", \'"+UserName+"\', \'"+Email+"\', \'"+Password+"\', "+Zip+", "+Range+");");
+                    sqlConn.addParam("@UserName", System.Data.SqlDbType.VarChar, UserName);
+                    sqlConn.addParam("@Email", System.Data.SqlDbType.VarChar, Email);
+                    sqlConn.addParam("@Password", System.Data.SqlDbType.VarChar, Password);
+                    sqlConn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                    sqlConn.addParam("@Range", System.Data.SqlDbType.Float, Range);
+                    sqlConn.UseParam("INSERT INTO person (ID, UserName, Email, Password, Zip, Range) VALUES ("+maxInt+", @UserName, @Email, @Password, @Zip, @Range);");
                 }else{
                     throw new Exception("NOT AN INTEGER "+str);
                 }
@@ -82,7 +87,9 @@ namespace Handbook.Models{
         public int GetID(){
             try{
                 Start sqlConn = new Start();
-                string[] strReader = sqlConn.UseConn("SELECT * FROM person WHERE UserName = \'"+UserName+"\' AND Email = \'"+Email+"\';")[0];
+                sqlConn.addParam("@UserName", System.Data.SqlDbType.VarChar, UserName);
+                sqlConn.addParam("@Email", System.Data.SqlDbType.VarChar, Email);
+                string[] strReader = sqlConn.UseParam("SELECT * FROM person WHERE UserName = @UserName AND Email = @Email;")[0];
                 string str = strReader[0];
                 int maxInt;
                 if (int.TryParse(str, out maxInt)){
@@ -98,7 +105,8 @@ namespace Handbook.Models{
         public bool Read(int ID){
             try{
                 Start sqlConn = new Start();
-                string[] strArr = sqlConn.UseConn("SELECT * FROM person WHERE ID = "+ID+";")[0];
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                string[] strArr = sqlConn.UseParam("SELECT * FROM person WHERE ID = @ID;")[0];
                 UserName = strArr[1];
                 Email = strArr[2];
                 Password = strArr[3];
@@ -113,7 +121,13 @@ namespace Handbook.Models{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("UPDATE person SET UserName = \'"+UserName+"\', Email = \'"+Email+"\', Password = \'"+Password+"\', Zip = "+Zip+", Range = "+Range+" WHERE ID = "+ID+";");
+                sqlConn.addParam("@UserName", System.Data.SqlDbType.VarChar, UserName);
+                sqlConn.addParam("@Email", System.Data.SqlDbType.VarChar, Email);
+                sqlConn.addParam("@Password", System.Data.SqlDbType.VarChar, Password);
+                sqlConn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                sqlConn.addParam("@Range", System.Data.SqlDbType.Float, Range);
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                sqlConn.UseParam("UPDATE person SET UserName = @UserName, Email = @Email, Password = @Password, Zip = @Zip, Range = @Range WHERE ID = @ID;");
                 return true;   
             }catch(Exception e){
                 Console.WriteLine(e);
@@ -124,9 +138,11 @@ namespace Handbook.Models{
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();
-                sqlConn.UseConn("DELETE FROM path WHERE PersonID = "+ID+";");
+                Path.DeletePerson(ID);
                 SavedResources.DeletePerson(ID);
-                sqlConn.UseConn("DELETE FROM person WHERE ID = "+ID+" AND UserName = \'"+UserName+"\';");
+                sqlConn.addParam("@UserName", System.Data.SqlDbType.VarChar, UserName);
+                sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);
+                sqlConn.UseParam("DELETE FROM person WHERE ID = @ID AND UserName = @UserName;");
                 return true;   
 
             }catch(Exception e){
