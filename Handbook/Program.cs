@@ -11,6 +11,9 @@ namespace Handbook{
                 Sql();
             }else if (prog.Equals("app")){
                 App();
+            }else{
+                Console.WriteLine("Try Again");
+                Main();
             }
         }
 
@@ -54,12 +57,19 @@ namespace Handbook{
             if (res.Create()){
                 Console.WriteLine("tada");
             }
-            */
-
-            var conn = new Models.Start();
             var id = "%"+"a"+"%";
             conn.addParam("@Title", System.Data.SqlDbType.VarChar, id);
             List<string[]> strUser = conn.UseParam("SELECT * FROM resource WHERE Title LIKE @Title ORDER BY Zip OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY;");
+
+                    <form method="post" style="float:left;">
+                        <input type="hidden" id="ResourceID" name="ResourceID" value=@strings[0]/>
+                        <input type="image" src="imgs\tsb_new_logo_registered_tm.png" alt="@strings[1]" asp-controller="Home" asp-action="ResourcePage">
+                    </form>
+            
+            */
+
+            var conn = new Models.Start();
+            List<string[]> strUser = conn.UseConn("SELECT * FROM resource;");
             
             foreach(string[] row in strUser){
                 foreach(string str in row){

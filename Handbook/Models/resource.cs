@@ -1,3 +1,5 @@
+using Microsoft.IdentityModel.Tokens;
+
 namespace Handbook.Models{
     class Resource{
         //string types is char[255] types in database
@@ -140,13 +142,12 @@ namespace Handbook.Models{
                 return false;
             }
         }
-        public static List<string[]> GetResources(int Offset, int Rows){
-            var sqlConn = new Models.Start();
-            sqlConn.addParam("@Offset", System.Data.SqlDbType.Int, Offset);
-            sqlConn.addParam("@Rows", System.Data.SqlDbType.Int, Rows);
-            List<string[]> listRes = sqlConn.UseParam("SELECT * FROM resource ORDER BY Zip OFFSET @Offset ROWS FETCH NEXT @Rows ROWS ONLY;");
+        public static List<string[]> GetResources(){
+            var conn = new Models.Start();
+            List<string[]> listRes = conn.UseConn("SELECT * FROM resource ORDER BY Zip;");
             return listRes;
         }
+
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
@@ -198,6 +199,51 @@ namespace Handbook.Models{
                 Console.WriteLine(e);
                 return -1;
             }
+        }
+        public static List<string[]> ResourceSearch(string KeyWord, int Zip, int Category){            
+            string[] column;
+            if(!string.IsNullOrEmpty(KeyWord)){
+                column = new string[3];
+                column[0] = "Title";
+                column[1] = "Provider";
+                column[2] = "Details";
+            }else{column = new string[1];}
+            var conn = new Models.Start();
+            
+            List<string[]> list = new List<string[]>();
+            foreach (string str in column){
+                string sql = "SELECT * FROM resource";
+                if(!string.IsNullOrEmpty(KeyWord)){
+                    conn.addParam("@Column", System.Data.SqlDbType.VarChar, str);
+                    conn.addParam("@KeyWord", System.Data.SqlDbType.VarChar, "%"+KeyWord.Trim()+"%");
+                    sql = sql + " WHERE @Column LIKE @KeyWord";
+                    
+                }
+                if(Zip>=0){
+                    if(!string.IsNullOrEmpty(KeyWord)){
+                        sql = sql + " AND";
+                    }else{
+                        sql = sql + " WHERE";
+                    }
+                    conn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                    sql = sql + " ZIP = @Zip";
+                }
+                if(Category>=0){
+                    if(!string.IsNullOrEmpty(KeyWord) || Zip>=0){
+                        sql = sql + " AND";
+                    }else{
+                        sql = sql + " WHERE";
+                    }
+                    conn.addParam("@Cat", System.Data.SqlDbType.Int, Category);
+                    sql = sql + " Category = @Cat";
+                }
+                if(list.IsNullOrEmpty()){
+                    list = conn.UseParam(sql+";");
+                }else{list.AddRange(conn.UseParam(sql+";"));}
+                
+            }
+        
+            return list;
         }
     }
 }

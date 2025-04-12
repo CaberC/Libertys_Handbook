@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Handbook.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Handbook.Controllers;
 class ResourceController : Controller{
-    public static List<string[]> GetResources(int Page, int Rows){
-        return Resource.GetResources(Page*Rows,Rows);
+    public static List<string[]> GetResources(){
+        List<string[]> res = Resource.GetResources();
+        return res;
     }
     public static Resource Read(string ID){
         try{
@@ -60,5 +62,13 @@ class ResourceController : Controller{
             Console.WriteLine(e);
             return null;
         }
+    }
+    public static List<string[]> ResourceSearch(string KeyWord, string ZipStr, string Category){
+        if(ZipStr.IsNullOrEmpty()){ZipStr="-1";}
+        int.TryParse(ZipStr, out int Zip);
+        int.TryParse(Category, out int Cat);
+        List<string[]> list = Resource.ResourceSearch(KeyWord, Zip, Cat);
+         
+        return list;
     }
 }

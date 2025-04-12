@@ -37,6 +37,7 @@ public class HomeController : Controller
     }
     public IActionResult Database()
     {
+        ViewBag.loadBool = false;
         return View();
     }
 
@@ -170,18 +171,17 @@ public class HomeController : Controller
         }
     }
     public IActionResult ResourceBatch(){
-        ViewBag.resource  = ResourceController.GetResources(0,5);
+        ViewBag.resource  = ResourceController.GetResources();
         ViewBag.loadBool = true;
         return View(@"Database");
-
     }
 
-    [HttpPost]
-    public IActionResult ResourcePage(){
+    [HttpGet]
+    public IActionResult ResourcePage(string ResourceID){
         try{
-            if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
+            if(ResourceID != null){
                 //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
-                Resource res = ResourceController.Read((string)HttpContext.Request.Form["ResourceID"]);
+                Resource res = ResourceController.Read(ResourceID);
                 if(res != null){return View(@"Resource", res);}
                 else{throw new Exception();}
             }else{throw new Exception();}
@@ -252,5 +252,11 @@ public class HomeController : Controller
     }
     public IActionResult toCreateResource(){
         return View(@"CreateResources");
+    }
+    [HttpPost]
+    public IActionResult ResourceSearch(){
+        ViewBag.resource = ResourceController.ResourceSearch(HttpContext.Request.Form["KeyWord"].ToString(), HttpContext.Request.Form["Zip"].ToString(), HttpContext.Request.Form["Category"].ToString());
+        ViewBag.loadBool = true;
+        return View(@"Database");
     }
 }

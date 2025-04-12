@@ -5,30 +5,45 @@
 <h1>@ViewData["Title"]</h1>
 
 <h2>Welcome to our resources database service!</h2>
-<form method="post" action="/Home/ResourceBatch">
-    <button type="submit">Load Resources</button>
+
+<hr>
+<form method="post" action="/Home/ResourceSearch">
+    <label for="KeyWord">Key Words:</label>
+    <input type="text" id="KeyWord" name="KeyWord" />
+    <label for="Zip">Zip:</label>
+    <input type="text" id="Zip" name="Zip" />
+    <p>
+        <label for="Category">Category:  </label>
+        <label for="Any">Any</label>
+        <input type="radio" id="Any" name="Category" value="-1" checked>
+        <label for="Legal">Legal</label>
+        <input type="radio" id="Legal" name="Category" value="0">
+        <label for="Food">Food</label>
+        <input type="radio" id="Food" name="Category" value="1">
+        <label for="General">General</label>
+        <input type="radio" id="General" name="Category" value="2">
+    </p>    
+    <button type="submit">SearchResources</button>
 </form>
 <hr>
-
-<img src="\imgs\tsb_new_logo_registered_tm.png" alt=" It didn't work.">
-
 @{
     try{
-        if(ViewBag!= null && ViewBag.loadBool){
+        if(ViewBag != null && ViewBag.loadBool){
             List<string[]> list = ViewBag.resource;
             foreach(string[] strings in list){
                 <div style="border:solid;">
-                    <form method="post" style="float:left;">
-                        <input type="hidden" id="ResourceID" name="ResourceID" value=@strings[0]/>
-                        <input type="image" src="imgs\tsb_new_logo_registered_tm.png" alt="Or Click Me" asp-controller="Home" asp-action="ResourcePage">
-                    </form>
 
-                    <h2>@strings[1]</h2><p>@strings[3]</p>
-                    <br>
+                    <h2>@strings[1]</h2><p>By @strings[4] action zip code: @strings[3]</p>
+                    <hr>
+                    @Html.ActionLink("More About "+strings[1], "ResourcePage", "Home", new {ResourceID = strings[0]}, null)     
                     <p>@strings[5]</p>
                 </div>
             }
             
+        }else{
+            <form method="post" action="/Home/ResourceBatch">
+                <button type="submit">Load all Resources</button>
+            </form>
         }
     }catch(Exception e){
         Console.WriteLine(e);
