@@ -48,9 +48,6 @@ namespace Handbook.Models{
         public string GetEmail(){
             return Email;
         }
-        public string GetPassword(){
-            return Password;
-        }
         public int GetZip(){
             return Zip;
         }
@@ -150,6 +147,19 @@ namespace Handbook.Models{
                 return false;
             }
         }
-        
+        public bool CheckPassword(string pass){
+            if(pass.Equals(Password)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        /*
+        public int isLoggedin(){
+            int ID=-1;
+            Console.WriteLine(ID+" is logged in");
+            return ID;
+        }
+        */
     }
 }

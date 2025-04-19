@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Mvc;
 using Handbook.Models;
 
@@ -22,12 +22,13 @@ class PersonController : Controller{
             return false;
         }
         user.Read(id);
-        string pass = user.GetPassword();
-        if(!pass.Equals(Password)){
+        
+        if(!user.CheckPassword(Password)){
             ID = -1;
             return false;
         }
         ID = id;
+        
         return true;
     }
     public static string GetUserName(int ID){
@@ -42,7 +43,7 @@ class PersonController : Controller{
             if(!user.Create()){
                 throw new Exception("Create Failed");
             }else{
-                ID = user.GetID();
+                Login(UserName, Email, Password, out ID);
                 return true;
             }
         }catch(Exception e){
@@ -53,7 +54,7 @@ class PersonController : Controller{
         
     }
     public static bool DeleteUser(int ID){
-        try{
+        try{ 
             Person user = new Person(ID);
             if(!user.Delete(ID)){
                 throw new Exception();
@@ -64,4 +65,12 @@ class PersonController : Controller{
             return false;
         }
     }
+    /*
+    public static void cacheLogin(){
+        IMemoryCache memoryCache;
+        var options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(3));
+        memoryCache.Set("ID", GetID(), options);
+        Console.WriteLine("Set");
+    }
+    */
 }

@@ -80,7 +80,7 @@ public class HomeController : Controller
                     ViewData["Day"] = day.ToString();
                     ViewData["UserName"]= UserName;
                     //_cache.Set("UserID", ID);
-                    Console.WriteLine("UserID "+ID);
+                    //Console.WriteLine("UserID "+ID);
                 }else{throw new Exception("invalid password");}
                 ViewData["UserID"]=ID;
                 return View(@"Person/HomePage");
@@ -111,6 +111,17 @@ public class HomeController : Controller
     public IActionResult NewUser(){
         return View(@"Person/NewMember");
     }
+
+    [HttpPost]
+    public IActionResult ReturningUser(){
+        var ID = HttpContext.Request.Form["ID"];
+        if(int.TryParse(ID, out int res)){
+            return MemberLogin(res);
+        }else{
+            return View(@"404");
+        }
+    }
+        
     [HttpPost]
     public IActionResult MemberCreate(){
         string UserName;
@@ -146,10 +157,9 @@ public class HomeController : Controller
         ViewData["UserID"]= ID;
         return View(@"Person/HomePage");
     }
-    //public IActionResult MemberLogout(){
-    //    _cache.Set("UserID", -1);
-    //    return Member();
-    //}
+    public IActionResult MemberLogout(){
+        return View(@"Index");
+    }
     public IActionResult MemberDelete(){
         try{
             int ID = -1;
@@ -257,6 +267,6 @@ public class HomeController : Controller
     public IActionResult ResourceSearch(){
         ViewBag.resource = ResourceController.ResourceSearch(HttpContext.Request.Form["KeyWord"].ToString(), HttpContext.Request.Form["Zip"].ToString(), HttpContext.Request.Form["Category"].ToString());
         ViewBag.loadBool = true;
-        return View(@"Database");
+        return View(@"Database"); 
     }
 }

@@ -1,7 +1,7 @@
 @{
 }
 <h1>@Html.Encode(ViewData["Title"])</h1>
-
+<script>localStorage.setItem('ID', @ViewData["UserID"]);</script>
 <!--@Html.ActionLink("Logout","MemberLogout", "HomeController")
 <input type="button" value="logout" onclick="location.href='<%: Url.Action("MemberLogout", "HomeController") %>'" />-->
 <br>

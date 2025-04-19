@@ -270,3 +270,9 @@ C:\Users\roblo\OneDrive\Documents\Libertys_Handbook\Libertys_Handbook\Handbook\o
 C:\Users\roblo\OneDrive\Documents\Libertys_Handbook\Libertys_Handbook\Handbook\obj\Debug\net9.0\Handbook.pdb
 C:\Users\roblo\OneDrive\Documents\Libertys_Handbook\Libertys_Handbook\Handbook\obj\Debug\net9.0\Handbook.genruntimeconfig.cache
 C:\Users\roblo\OneDrive\Documents\Libertys_Handbook\Libertys_Handbook\Handbook\obj\Debug\net9.0\ref\Handbook.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Users\Caber\Documents\_Capstone\Libertys_Handbook\Handbook\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
