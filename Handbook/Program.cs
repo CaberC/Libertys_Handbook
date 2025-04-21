@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 namespace Handbook{
     class Program{
         static void Main(){
+            /*
             Console.WriteLine("Enter program to run [sql or app]:");
             string prog = Console.ReadLine();
             if (prog.Equals("sql")){
@@ -15,6 +16,8 @@ namespace Handbook{
                 Console.WriteLine("Try Again");
                 Main();
             }
+            */
+            App();
         }
 
         static void App(){
@@ -61,9 +64,9 @@ namespace Handbook{
             
             app.Run();
         }
-
+        /*
        static void Sql(){
-            /*
+            
             Resource res = new Resource("The HRDC", 2, 59715, "The HRDC", "Welcome to HRDC, where you’ll find us working to improve our neighbors’ lives by building a better community in Southwest Montana. We invite you to become part of our HRDC family whether you need help or are able to provide help. https://thehrdc.org/");
             if (res.Create()){
                 Console.WriteLine("tada");
@@ -77,7 +80,7 @@ namespace Handbook{
                         <input type="image" src="imgs\tsb_new_logo_registered_tm.png" alt="@strings[1]" asp-controller="Home" asp-action="ResourcePage">
                     </form>
             
-            */
+            
 
             var conn = new Models.Start();
             conn.addParam("@PersonID", System.Data.SqlDbType.Int, 0);
@@ -90,6 +93,6 @@ namespace Handbook{
                 Console.WriteLine();
             }
             
-        }
+        }*/
     }
 }

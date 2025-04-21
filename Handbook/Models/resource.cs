@@ -151,7 +151,6 @@ namespace Handbook.Models{
         public bool Update(int ID){
             try{
                 Start sqlConn = new Start();
-                
                 if (Resource.CheckAvaialability(Title, Zip)==1){
                     sqlConn.addParam("@Category", System.Data.SqlDbType.VarChar, Category);
                     sqlConn.addParam("@Provider", System.Data.SqlDbType.VarChar, Provider);
@@ -161,14 +160,12 @@ namespace Handbook.Models{
                     return true;
                 }else{
                     return false;
-                }
-                   
+                }  
             }catch(Exception e){
                 Console.WriteLine(e);
                 return false;
             }
         }
-        //ADD DELETE FROM ALL TABLES AS THEY'RE ADDED
         public bool Delete(int ID){
             try{
                 Start sqlConn = new Start();

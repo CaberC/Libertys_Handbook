@@ -1,6 +1,5 @@
 @{
     ViewData["Title"] = "Resource Database";
-    //ViewData["Model"] = "";
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -31,19 +30,12 @@
         if(ViewBag != null && ViewBag.loadBool){
             List<string[]> list = ViewBag.resource;
             foreach(string[] strings in list){
-                <div style="border:solid;">
-
-                    <h2>@strings[1]</h2><p>By @strings[4] action zip code: @strings[3]</p>
-                    <hr>
+                <div style="border:solid;"><h2>@strings[1]</h2><p>By @strings[4] action zip code: @strings[3]</p><hr>
                     @Html.ActionLink("More About "+strings[1], "ResourcePage", "Home", new {ResourceID = strings[0]}, null)     
-                    <p>@strings[5]</p>
-                </div>
+                    <p>@strings[5]</p></div>
             }
-            
         }else{
-            <form method="post" action="/Home/ResourceBatch">
-                <button type="submit">Load all Resources</button>
-            </form>
+            <form method="post" action="/Home/ResourceBatch"><button type="submit">Load all Resources</button></form>
         }
     }catch(Exception e){
         Console.WriteLine(e);
@@ -52,7 +44,7 @@
 }
 <hr>
 @{
-    if (ViewData["UserID"].Equals(0)){
+    if (ViewData["UserID"]!=null && ViewData["UserID"].Equals(0)){
         <form method="post" action="/Home/toCreateResource">
             <button type="submit">Create New Resources</button>
         </form>
