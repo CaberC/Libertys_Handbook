@@ -1,11 +1,27 @@
 @{
 }
 <h1>@Html.Encode(ViewData["Title"])</h1>
-<script>localStorage.setItem('ID', @ViewData["UserID"]);</script>
-<!--@Html.ActionLink("Logout","MemberLogout", "HomeController")
-<input type="button" value="logout" onclick="location.href='<%: Url.Action("MemberLogout", "HomeController") %>'" />-->
 <br>
 <p>Welcome @ViewData["UserID"] @Html.Encode(ViewData["UserName"]) on @Html.Encode(ViewData["Day"])</p>
+<hr>
+@{
+    try{
+        if(ViewBag != null && ViewBag.loadBool){
+            <h2>Saved Resources</h2>
+            List<string[]> list = ViewBag.resource;
+            foreach(string[] strings in list){
+                <div style="border:solid;"><h2>@strings[1]</h2><p>By @strings[4] action zip code: @strings[3]</p><hr>@Html.ActionLink("More About "+strings[1], "ResourcePage", "Home", new {ResourceID = strings[0]}, null)<p>@strings[5]</p></div><form method="post" action="/Home/RemoveSaved"><button type="submit">Unsave Resource</button><input type="hidden" name="ResourceID" value="@strings[0]" /></form>
+            }
+        }else{
+            <form method="post" action="/Home/LoadSaved">
+                <button type="submit">Load Saved Resources</button>
+            </form>
+        }
+    }catch(Exception e){
+        Console.WriteLine(e);
+    }
+    
+}
 <hr>
 <form method="post" action="/Home/MemberDelete">
     <button type="submit">Delete User?</button>

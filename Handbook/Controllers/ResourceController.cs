@@ -71,4 +71,17 @@ class ResourceController : Controller{
          
         return list;
     }
+    public static bool Save(string ResourceID, int UserID){
+        int.TryParse(ResourceID, out int ID);
+        //Console.WriteLine(UserID+" saved "+ResourceID);
+        if(SavedResources.Create(UserID, ID)){return true;}else{return false;}
+        
+    }
+    public static List<string[]> GetSavedResources(int userID){
+        return SavedResources.GetResources(userID);
+    }
+    public static bool DeleteSaved(int userID, int ResourceID){
+        return SavedResources.Delete(userID, ResourceID);
+    }
+
 }

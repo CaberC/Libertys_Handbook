@@ -3,107 +3,83 @@ using Microsoft.AspNetCore.Mvc;
 using Handbook.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Handbook.Controllers;
 
 public class HomeController : Controller
 {
     //private readonly IMemoryCache _cache;
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(IMemoryCache cache, ILogger<HomeController> logger)
-    {
-        _logger = logger;
-        //_cache = cache;
-    }
-
-    public IActionResult Index()
-    {
-        return View(@"Index");
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    public IActionResult FAQ()
-    {
-        return View();
-    }
-    public IActionResult Translation()
-    {
-        return View();
-    }
-    public IActionResult Database()
-    {
+    Models.Date day = new Date();
+    public IActionResult Index(){return View(@"Index");}
+    public IActionResult Privacy(){return View();}
+    public IActionResult FAQ(){return View();}
+    public IActionResult Translation(){return View();}
+    [HttpGet]
+    public IActionResult Database(){
         ViewBag.loadBool = false;
+        ViewData["UserID"] = HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
     [HttpGet]
-    public IActionResult Member()
-    {
-        try{
-            //_cache.TryGetValue("UserID", out int UserID);
-            //if (UserID>=0){return MemberLogin(UserID);}else{
-            //    Console.WriteLine("UserID "+UserID);
-                throw new Exception();//}
-        }catch{      
+    public IActionResult Member(){
         ViewData["Title"] = "Member Page";
-        Models.Date day = new Date();
-        day.Today();
         ViewData["Day"] = day.ToString();
-        ViewData["Body"]=PersonController.getUsers();
-        
+        ViewData["Body"]="Welcome to Liberty\'s Handbook";
+        //Console.WriteLine(HttpContext.Session.GetInt32("UserID")+", "+HttpContext.Session.GetString("UserName")+" connected at "+day.ToString());
+        ViewData["UserID"]=HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Person/Member");
-        }
     }
+
     [HttpPost]
     public IActionResult MemberLogin()
     {
         try {
-            Console.WriteLine("New User");
+            //Console.WriteLine("New User");
             string UserName = HttpContext.Request.Form["UserName"];
             string Email = HttpContext.Request.Form["Email"];
             string Password = HttpContext.Request.Form["Password"];
             if (UserName != null && Email != null && Password != null){
                 if(PersonController.Login(UserName, Email, Password, out int ID)){
                     ViewData["Title"] = "HomePage";
-                    Models.Date day = new Date();
-                    day.Today();
                     ViewData["Day"] = day.ToString();
+                    HttpContext.Session.SetInt32("UserID", ID);
+                    HttpContext.Session.SetString("UserName", UserName);
+        //Console.WriteLine(HttpContext.Session.GetInt32("UserID")+", "+HttpContext.Session.GetString("UserName")+" connected at "+day.ToString());
+                    ViewData["UserID"]=ID;
                     ViewData["UserName"]= UserName;
+                    ViewBag.loadBool = false;
+                    return View(@"Person/HomePage");
                     //_cache.Set("UserID", ID);
                     //Console.WriteLine("UserID "+ID);
-                }else{throw new Exception("invalid password");}
-                ViewData["UserID"]=ID;
-                return View(@"Person/HomePage");
+                }else{return View(@"404");}
             }else{
                 throw new Exception("input login data");
             }
         }catch(Exception e){
             ViewData["Body"]= "invalid login : "+e.ToString();
+            ViewData["Title"] = "Member Page";
             return View(@"Person/Member"); 
         }
     }
-    public IActionResult MemberLogin(int ID){
+    [HttpPost]
+    public IActionResult ReLogin(){
         try{            
-            Console.WriteLine("Returning User");
+            //Console.WriteLine("Returning User");
             ViewData["Title"] = "HomePage";
-            Models.Date day = new Date();
-            day.Today();
-            ViewData["Day"] = day.ToString();
-            ViewData["UserName"]= PersonController.GetUserName(ID);
-            ViewData["UserID"]=ID;
+            if(HttpContext.Session.GetInt32("UserID") == null){
+                throw new Exception("ID invalid.");
+            }
+            ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+            ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+            ViewBag.loadBool = false;            
             return View(@"Person/HomePage");
         }catch(Exception e){
             ViewData["Body"]= "invalid login : "+e.ToString();
+            ViewData["Title"] = "Member Page";
             return View(@"Person/Member"); 
         }
     }
@@ -112,16 +88,6 @@ public class HomeController : Controller
         return View(@"Person/NewMember");
     }
 
-    [HttpPost]
-    public IActionResult ReturningUser(){
-        var ID = HttpContext.Request.Form["ID"];
-        if(int.TryParse(ID, out int res)){
-            return MemberLogin(res);
-        }else{
-            return View(@"404");
-        }
-    }
-        
     [HttpPost]
     public IActionResult MemberCreate(){
         string UserName;
@@ -142,22 +108,32 @@ public class HomeController : Controller
             if(!float.TryParse(HttpContext.Request.Form["Range"],out float Range)){
                 throw new Exception("RANGE NOT A FLOAT");
             }
-            if (!PersonController.CreateUser(out ID, UserName, Email, Password, Zip, Range)){
-                throw new Exception("USERCREATE FAILED");
-            }
+
+            bool saved = PersonController.CreateUser(out ID, UserName, Email, Password, Zip, Range);
+            if (!saved){throw new Exception("USERCREATE FAILED");}
+
+            //Console.WriteLine("Returning User");
+            ViewData["Title"] = "HomePage";
+            Models.Date day = new Date();
+            day.Today();
+            ViewData["Day"] = day.ToString();
+            HttpContext.Session.SetInt32("UserID", ID);
+            HttpContext.Session.SetString("UserName", UserName);
+            //Console.WriteLine(HttpContext.Session.GetInt32("UserID")+", "+HttpContext.Session.GetString("UserName")+" connected at "+day.ToString());   
+            ViewData["UserID"]=ID;
+            ViewData["UserName"]= UserName;
+            ViewBag.loadBool = false;
+            return View(@"Person/HomePage");
+
         }catch(Exception e){
             ViewData["Body"]= "invalid login : "+e.ToString();
+            ViewData["Title"] = "Member Page";
             return View(@"Person/Member"); 
         }
-        ViewData["Title"] = "HomePage";
-        Models.Date day = new Date();
-        day.Today();
-        ViewData["Day"] = day.ToString();
-        ViewData["UserName"]= UserName;
-        ViewData["UserID"]= ID;
-        return View(@"Person/HomePage");
     }
-    public IActionResult MemberLogout(){
+    public IActionResult LogOut(){
+        HttpContext.Session.Set("UserID", null);
+        HttpContext.Session.Set("UserName", null);
         return View(@"Index");
     }
     public IActionResult MemberDelete(){
@@ -169,6 +145,8 @@ public class HomeController : Controller
                     if(ID != -1){
                         PersonController.DeleteUser(ID);
                         ViewData["Body"]= "Beep Boop Deleted";
+                        HttpContext.Session.Set("UserID", null);
+                        HttpContext.Session.Set("UserName", null);
                         return View(@"Person/Member"); 
                     }
                 }
@@ -183,6 +161,8 @@ public class HomeController : Controller
     public IActionResult ResourceBatch(){
         ViewBag.resource  = ResourceController.GetResources();
         ViewBag.loadBool = true;
+        ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Database");
     }
 
@@ -192,6 +172,8 @@ public class HomeController : Controller
             if(ResourceID != null){
                 //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
                 Resource res = ResourceController.Read(ResourceID);
+                ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+                ViewData["UserName"]=HttpContext.Session.GetString("UserName");
                 if(res != null){return View(@"Resource", res);}
                 else{throw new Exception();}
             }else{throw new Exception();}
@@ -217,6 +199,41 @@ public class HomeController : Controller
         }
     }
     [HttpPost]
+    public IActionResult SaveResource(){
+        try{
+            var ResourceID = HttpContext.Request.Form["ResourceID"];
+             if(!ResourceID.IsNullOrEmpty()&&HttpContext.Session.GetInt32("UserID")!=null){
+                //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+                if (ResourceController.Save((string)ResourceID, (int)HttpContext.Session.GetInt32("UserID"))){
+                    return ResourceBatch();
+                }else{return View(@"404");}
+            }else{throw new Exception();}
+        }
+        catch (System.Exception)
+        {
+            return View(@"404");
+        }
+    }
+    [HttpPost]
+    public IActionResult LoadSaved(){
+        ViewBag.resource  = ResourceController.GetSavedResources( (int) HttpContext.Session.GetInt32("UserID"));
+        ViewBag.loadBool = true;
+        ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+        return View(@"Person/HomePage");
+    }
+    [HttpPost]
+    public IActionResult RemoveSaved(){
+        var ResourceID = HttpContext.Request.Form["ResourceID"];
+        if(!ResourceID.IsNullOrEmpty()&&HttpContext.Session.GetInt32("UserID")!=null){
+            //Console.WriteLine(HttpContext.Request.Form["ResourceID"]);
+            
+            if (int.TryParse(ResourceID, out int resID) && ResourceController.DeleteSaved((int)HttpContext.Session.GetInt32("UserID"), resID)){
+            }else{return View(@"404");}
+        }
+        return LoadSaved();
+    }
+    [HttpPost]
     public IActionResult UpdateResource(){
         try{
             if(!HttpContext.Request.Form["ResourceID"].IsNullOrEmpty()){
@@ -228,6 +245,8 @@ public class HomeController : Controller
                 Args[3] = HttpContext.Request.Form["Details"];
                 Resource res = ResourceController.Update(Args);
                 if(res==null){throw new Exception("Update Failed");}
+                ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+                ViewData["UserName"]=HttpContext.Session.GetString("UserName");
                 return View(@"Resource", res);
             }else{throw new Exception();}
         }
@@ -250,6 +269,8 @@ public class HomeController : Controller
                 Args[4] = HttpContext.Request.Form["Details"];
                 Resource res = ResourceController.Create(Args);
                 if(res==null){throw new Exception("Create Failed");}
+                ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+                ViewData["UserName"]=HttpContext.Session.GetString("UserName");
                 return View(@"Resource", res);
             }else{throw new Exception("Forms must be populated");}
 
@@ -261,12 +282,22 @@ public class HomeController : Controller
         }
     }
     public IActionResult toCreateResource(){
+        ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"CreateResources");
     }
     [HttpPost]
     public IActionResult ResourceSearch(){
         ViewBag.resource = ResourceController.ResourceSearch(HttpContext.Request.Form["KeyWord"].ToString(), HttpContext.Request.Form["Zip"].ToString(), HttpContext.Request.Form["Category"].ToString());
         ViewBag.loadBool = true;
+        ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Database"); 
     }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error(){
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 }
+

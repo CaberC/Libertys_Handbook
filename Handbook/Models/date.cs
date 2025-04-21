@@ -6,7 +6,7 @@ namespace Handbook.Models{
         // sql uses 1975-01-01 fomatting
         private string date;
         public Date(){
-            date = "1975-01-01";
+            Today();
         }
         public void Today(){
             DateTime thisDay = DateTime.Today;

@@ -17,18 +17,14 @@ class PersonController : Controller{
     public static bool Login(string UserName, string Email, string Password, out int ID){
         Person user = new Person(UserName,Email,"",0,0f);
         int id = user.GetID();
+        ID = id;
         if(id<0){
-            ID = -1;
             return false;
         }
         user.Read(id);
-        
         if(!user.CheckPassword(Password)){
-            ID = -1;
             return false;
         }
-        ID = id;
-        
         return true;
     }
     public static string GetUserName(int ID){

@@ -23,6 +23,15 @@ namespace Handbook{
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -42,6 +51,8 @@ namespace Handbook{
             app.MapStaticAssets();
 
             app.UseStaticFiles(new StaticFileOptions {FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data", "imgs")), RequestPath = "/imgs"});
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
@@ -69,7 +80,8 @@ namespace Handbook{
             */
 
             var conn = new Models.Start();
-            List<string[]> strUser = conn.UseConn("SELECT * FROM resource;");
+            conn.addParam("@PersonID", System.Data.SqlDbType.Int, 0);
+            List<string[]> strUser = conn.UseParam("SELECT DISTINCT * FROM resource INNER JOIN savedresources ON resource.ID=savedresources.ResourceID WHERE savedresources.PersonID = @PersonID;");
             
             foreach(string[] row in strUser){
                 foreach(string str in row){

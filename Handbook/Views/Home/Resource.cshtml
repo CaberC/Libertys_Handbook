@@ -6,7 +6,20 @@
 <br>
 <p>Cat: @Model.GetCategory() At: @Model.GetZip()</p>
 <hr>
-<form method="post" action="/Home/EditResource">
-    <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()"/>
-    <button type="submit">Edit  Resource</button>  
-</form>
+
+
+
+@{
+    if (ViewData["UserID"]!=null){
+        <form method="post" action="/Home/SaveResource">
+            <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()" />
+            <button type="submit">Save  Resource</button>  
+        </form>
+    }
+    if (ViewData["UserID"].Equals(0)){
+        <br>
+        <form method="post" action="/Home/EditResource">
+            <button type="submit">Edit  Resource</button>  
+        </form>
+    }
+}

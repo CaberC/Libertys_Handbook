@@ -53,7 +53,7 @@ namespace Handbook.Models{
 
                 var command = new SqlCommand(sql, connection);
                 var reader = command.ExecuteReader();
-                Console.WriteLine(reader.RecordsAffected+" : "+sql);
+                //Console.WriteLine(reader.RecordsAffected+" : "+sql);
                 List<string[]> table = ReadReader(reader);
                 parameters.Clear();
                 connection.Close();
@@ -76,7 +76,7 @@ namespace Handbook.Models{
                     command.Parameters[p.key].Value = p.value;
                 }
                 var reader = command.ExecuteReader();
-                Console.WriteLine(reader.RecordsAffected+" : "+sql);
+                //Console.WriteLine(reader.RecordsAffected+" : "+sql);
                 List<string[]> table = ReadReader(reader);
                 connection.Close();
                 parameters.Clear();

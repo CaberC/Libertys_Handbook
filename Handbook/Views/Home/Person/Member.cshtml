@@ -1,70 +1,16 @@
 <h1>@Html.Encode(ViewData["Title"])</h1>
+<h2>@Html.Encode(ViewData["UserName"])</h2>
 <br>
-<div id="userForm">
-    <p id="messagetext"></p>
-    <form>
-        <button type="button" onclick="submitForm()">to MemberPage</button>
-        <button type="button" onclick="logOut()">Log off?</button>
-    </form>
-    <hr>
-</div>
 
-<script>
-    var userID = localStorage.getItem('ID');
-    const form = document.getElementById('userForm');
-    form.style.display = "none";
-    if(userID != null){
-        document.getElementById("messagetext").textContent = "Logged in as " + userID + "!";
-        form.style.display = "block";
+@{
+    if(ViewData["UserID"]!=null){
+        <p>Logged in as @ViewData["UserName"]!</p>
+        <form method="post" action="/Home/ReLogin"><button type="submit">Member Homepage</button></form>
+        <form method="post" action="/Home/LogOut"><button type="submit">Log Out</button></form>
+    }else{
+        <form method="post" action="/Home/NewUser"><button type="submit">Create New User</button></form><hr><form method="post" action="/Home/MemberLogin"><label for="txtName">UserName:</label><input type="text" id="txtName" name="UserName" /><label for="txtMail">Email:</label><input type="text" id="txtMail" name="Email" /><label for="txtWord">Password:</label><input type="Password" id="txtWord" name="Password" /><button type="submit">Log In</button></form> 
     }
-    function submitForm() {
-        const formData = new FormData();
-        formData.append("ID", userID);
+}
 
-        fetch('/Home/ReturningUser', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.open();
-            document.write(html);
-            document.close();
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    function logOut(){
-        localStorage.clear();
-        fetch('/Home/MemberLogout', {
-            method: 'POST',
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.open();
-            document.write(html);
-            document.close();
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-
-<form method="post" action="/Home/NewUser">
-    <button type="submit">Create New User</button>
-    
-</form>
-<hr>
-<form method="post" action="/Home/MemberLogin">  
-    <label for="txtName">UserName:</label>  
-    <input type="text" id="txtName" name="UserName" />  
-
-    <label for="txtMail">Email:</label>  
-    <input type="text" id="txtMail" name="Email" />
-
-    <label for="txtWord">Password:</label>  
-    <input type="Password" id="txtWord" name="Password" />
-
-    <button type="submit">Submit</button>  
-
-</form> 
 <br>
-<p>@Html.Encode(ViewData["body"])</p>
+<p>@Html.Encode(ViewData["body"])</p>    using Handbook.Controllers;

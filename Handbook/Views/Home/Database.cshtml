@@ -51,8 +51,10 @@
     
 }
 <hr>
-<form method="post" action="/Home/toCreateResource">
-    <button type="submit">Create New Resources</button>
-</form>
-
-
+@{
+    if (ViewData["UserID"].Equals(0)){
+        <form method="post" action="/Home/toCreateResource">
+            <button type="submit">Create New Resources</button>
+        </form>
+    }
+}
