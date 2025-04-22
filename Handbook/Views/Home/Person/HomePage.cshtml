@@ -3,6 +3,7 @@
 <h1>@Html.Encode(ViewData["Title"])</h1>
 <br>
 <p>Welcome @ViewData["UserID"] @Html.Encode(ViewData["UserName"]) on @Html.Encode(ViewData["Day"])</p>
+<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Translation">Translation</a>
 <hr>
 @{
     try{

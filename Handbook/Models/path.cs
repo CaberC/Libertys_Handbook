@@ -64,7 +64,7 @@ namespace Handbook.Models{
 
         public bool Create(){
             try{
-                if (isPerson){
+                if (!isPerson){
                     throw new Exception("PersonID must exsist");
                 }
                 Start sqlConn = new Start();
@@ -155,6 +155,17 @@ namespace Handbook.Models{
             }catch(Exception e){
                 Console.WriteLine(e);
                 return false;
+            }
+        }
+        public static List<string[]> GetDocs(int PersonID){
+            try{
+                Start sqlConn = new Start();
+                sqlConn.addParam("@PersonID", System.Data.SqlDbType.Int, PersonID);
+                List<string[]> docs = sqlConn.UseParam("SELECT * FROM path WHERE PersonID = @PersonID;");
+                return docs;   
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return null;
             }
         }
     }

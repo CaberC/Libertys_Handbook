@@ -4,8 +4,29 @@
 <h1>@ViewData["Title"]</h1>
 
 <h2>Welcome to our document translation service!</h2>
-<p>Please submit a document in PDF form below and select your target language, and we can automatically translate it for you!</p>
+<p>Please submit a document in PDF form below and select your target language, and we can automatically translate it for you! Files must below less then 20 pages and 20 mb, please.</p>
 <form asp-action="UploadFile" asp-controller="Home" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="application/pdf" required />
+    <input type="file" name="pdfFile" accept="application/pdf" required />
     <button type="submit">Upload PDF</button>
 </form>
+<p>@ViewData["errmessage"]</p>
+<hr>
+@{
+    try{
+        if(ViewBag != null && ViewBag.loadBool){
+            <h2>Saved Documents</h2>
+            List<string[]> list = ViewBag.documents;
+            foreach(string[] strings in list){
+                <div style="border:solid;"><h2>@strings[1]</h2><p>@strings[2]</p>
+                <form method="post" action="/Home/RemoveDocs"><button type="submit">Unsave Documents</button><input type="hidden" name="DocID" value="@strings[0]" /></form></div>
+            }
+        }else{
+            <form method="post" action="/Home/LoadDocs">
+                <button type="submit">Load Saved Documents</button>
+            </form>
+        }
+    }catch(Exception e){
+        Console.WriteLine(e);
+    }
+    
+}

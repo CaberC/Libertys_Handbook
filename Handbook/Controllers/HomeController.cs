@@ -15,7 +15,13 @@ public class HomeController : Controller
     public IActionResult Index(){return View(@"Index");}
     public IActionResult Privacy(){return View();}
     public IActionResult FAQ(){return View();}
-    public IActionResult Translation(){return View();}
+    [HttpGet]
+    public IActionResult Translation(){
+        ViewBag.loadBool = false;
+        ViewData["UserID"] = HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+        return View();
+        }
     [HttpGet]
     public IActionResult Database(){
         ViewBag.loadBool = false;
@@ -293,6 +299,64 @@ public class HomeController : Controller
         ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
         ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Database"); 
+    }
+    public IActionResult UploadFile(IFormFile pdfFile){
+        try{
+            if (HttpContext.Session.GetInt32("UserID") != null){
+                int UserID = (int)HttpContext.Session.GetInt32("UserID");
+                TranslationController.UploadFile(pdfFile, UserID);
+                ViewData["errmessage"] = "success";
+                ViewBag.loadBool = false;
+                ViewData["UserID"]= UserID;
+                ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+                return View(@"Translation");
+            }else{
+                throw new Exception("must be login to upload files");
+            }
+            
+        }catch(Exception e){
+            ViewData["errmessage"] = e.Message;
+            ViewBag.loadBool = false;
+            ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+            ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+            return View(@"Translation");
+        }
+    }
+    [HttpPost]
+    public IActionResult LoadDocs(){
+        if (HttpContext.Session.GetInt32("UserID") == null){
+            ViewData["errmessage"] = "must login";
+            ViewBag.loadBool = false;
+            ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+            ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+            return View(@"Translation");
+        }
+        int UserID = (int)HttpContext.Session.GetInt32("UserID");
+        ViewBag.documents = TranslationController.LoadDocs(UserID);
+        ViewBag.loadBool = true;
+        ViewData["UserID"]= UserID;
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+        return View(@"Translation");
+    }
+    public IActionResult RemoveDocs(){
+        if(!HttpContext.Request.Form["DocID"].IsNullOrEmpty() && HttpContext.Session.GetInt32("UserID")!=null){
+            int UserID = (int)HttpContext.Session.GetInt32("UserID");
+            bool isGone = TranslationController.Remove(UserID, HttpContext.Request.Form["DocID"]);
+            if(isGone){
+                ViewData["errmessage"] = "success";
+                ViewBag.documents = TranslationController.LoadDocs(UserID);
+                ViewBag.loadBool = true;
+            }else{
+                ViewData["errmessage"] = "fail";
+                ViewBag.loadBool = false;
+            }
+        }else{
+            ViewData["errmessage"] = "invalid DocID";
+            ViewBag.loadBool = false;
+        }
+        ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
+        ViewData["UserName"]=HttpContext.Session.GetString("UserName");
+        return View(@"Translation");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
