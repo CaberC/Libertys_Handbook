@@ -19,6 +19,7 @@
         <input type="radio" id="Legal" name="Category" value="0">
         <label for="Food">Food</label>
         <input type="radio" id="Food" name="Category" value="1">
+    using Azure;
         <label for="General">General</label>
         <input type="radio" id="General" name="Category" value="2">
     </p>    
@@ -34,12 +35,26 @@
                     @Html.ActionLink("More About "+strings[1], "ResourcePage", "Home", new {ResourceID = strings[0]}, null)     
                     <p>@strings[5]</p></div>
             }
+            int setpage;
+            string next ="next";
+            if(ViewBag.setpage>=0 && list.Count==5){
+                setpage = ViewBag.setpage +1;
+            }else if(ViewBag.setpage>0 && list.Count!=5){
+                setpage = ViewBag.setpage -1;
+                next = "last";
+            }else{setpage = 0;}
+            <form method="post" action="/Home/ResourceBatch"><input type="hidden" name="page" value="@setpage"><button type="submit">@next page</button></form>
         }else{
-            <form method="post" action="/Home/ResourceBatch"><button type="submit">Load all Resources</button></form>
+            int setpage;
+            if(ViewBag.setpage != null && ViewBag.setpage>0){
+                setpage = ViewBag.setpage;
+            }else{setpage = 0;}
+            
+            <form method="post" action="/Home/ResourceBatch"><input type="hidden" name="page" value="@setpage"><button type="submit">Load all Resources</button></form>
         }
     }catch(Exception e){
         Console.WriteLine(e);
-    }
+    } 
     
 }
 <hr>

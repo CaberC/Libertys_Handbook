@@ -164,9 +164,16 @@ public class HomeController : Controller
             return View(@"Person/Member");
         }
     }
+    [HttpPost]
     public IActionResult ResourceBatch(){
-        ViewBag.resource  = ResourceController.GetResources();
+        int setpage = 0;
+        if(!HttpContext.Request.Form["page"].IsNullOrEmpty()){
+            string str = HttpContext.Request.Form["page"].ToString();
+            if (int.TryParse(str, out setpage)){}
+        }
+        ViewBag.resource  = ResourceController.GetResources(setpage);
         ViewBag.loadBool = true;
+        ViewBag.setpage = setpage;
         ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
         ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Database");

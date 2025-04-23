@@ -4,10 +4,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Handbook.Controllers;
 class ResourceController : Controller{
-    public static List<string[]> GetResources(){
-        List<string[]> res = Resource.GetResources();
+    public static List<string[]> GetResources(int page){
+        List<string[]> res = Resource.GetResources(page);
         return res;
-    }
+    } 
     public static Resource Read(string ID){
         try{
             if (ID.EndsWith('/')){

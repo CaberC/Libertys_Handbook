@@ -142,9 +142,10 @@ namespace Handbook.Models{
                 return false;
             }
         }
-        public static List<string[]> GetResources(){
+        public static List<string[]> GetResources(int page){
             var conn = new Models.Start();
-            List<string[]> listRes = conn.UseConn("SELECT * FROM resource ORDER BY Zip;");
+            conn.addParam("@OFFSET", System.Data.SqlDbType.Int, page*5);
+            List<string[]> listRes = conn.UseParam("SELECT * FROM resource ORDER BY Zip OFFSET @offset ROWS FETCH NEXT 5 ROWS ONLY;");
             return listRes;
         }
 
