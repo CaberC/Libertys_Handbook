@@ -6,6 +6,21 @@
 <h2>Welcome to our document translation service!</h2>
 <p>Please submit a document in PDF form below and select your target language, and we can automatically translate it for you! Files must below less then 20 pages and 20 mb, please.</p>
 <form asp-action="UploadFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <p>The document is currently in:</p>
+    <input type="radio" id="en" name="source" value="en">
+    <label for="en">en (English)</label><br>
+    <input type="radio" id="es" name="source" value="es">
+    <label for="es">es (Espanol)</label><br>
+    <input type="radio" id="fr" name="source" value="fr">
+    <label for="fr">fr (French)</label> 
+    <p>Translate document into:</p>
+    <input type="radio" id="en" name="target" value="en">
+    <label for="en">en (English)</label><br>
+    <input type="radio" id="es" name="target" value="es">
+    <label for="es">es (Espanol)</label><br>
+    <input type="radio" id="fr" name="target" value="fr">
+    <label for="fr">fr (French)</label> 
+    <br>
     <input type="file" name="pdfFile" accept="application/pdf" required />
     <button type="submit">Upload PDF</button>
 </form>
@@ -17,7 +32,7 @@
             <h2>Saved Documents</h2>
             List<string[]> list = ViewBag.documents;
             foreach(string[] strings in list){
-                <div style="border:solid;"><h2>@strings[1]</h2><p>@strings[2]</p>
+                <div style="border:solid;"><h2><a href="@Url.Action("DownloadFile", "Home", new{PathID = strings[0]})">@strings[1]</a></h2><p>@strings[2]</p>
                 <form method="post" action="/Home/RemoveDocs"><button type="submit">Unsave Documents</button><input type="hidden" name="DocID" value="@strings[0]" /></form></div>
             }
         }else{

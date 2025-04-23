@@ -15,7 +15,7 @@ public class HomeController : Controller
     public IActionResult Index(){return View(@"Index");}
     public IActionResult Privacy(){return View();}
     public IActionResult FAQ(){return View();}
-    [HttpGet]
+    [HttpPost]
     public IActionResult Translation(){
         ViewBag.loadBool = false;
         ViewData["UserID"] = HttpContext.Session.GetInt32("UserID");
@@ -300,11 +300,11 @@ public class HomeController : Controller
         ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Database"); 
     }
-    public IActionResult UploadFile(IFormFile pdfFile){
+    public IActionResult UploadFile(IFormFile pdfFile, string source, string target){
         try{
             if (HttpContext.Session.GetInt32("UserID") != null){
                 int UserID = (int)HttpContext.Session.GetInt32("UserID");
-                TranslationController.UploadFile(pdfFile, UserID);
+                TranslationController.UploadFile(pdfFile, UserID, source, target);
                 ViewData["errmessage"] = "success";
                 ViewBag.loadBool = false;
                 ViewData["UserID"]= UserID;
@@ -357,6 +357,19 @@ public class HomeController : Controller
         ViewData["UserID"]= HttpContext.Session.GetInt32("UserID");
         ViewData["UserName"]=HttpContext.Session.GetString("UserName");
         return View(@"Translation");
+    }
+    public ActionResult DownloadFile(string PathID){
+        if(int.TryParse(PathID, out int ID)){
+            string path = TranslationController.Download(ID,(int)HttpContext.Session.GetInt32("UserID"));
+            string current = Directory.GetCurrentDirectory();
+            var uploadsFolder = System.IO.Path.Combine(current, "data");
+            var filePath = System.IO.Path.Combine(uploadsFolder, path);
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            var fileName = "downloaded-file.pdf";
+            return File(fileBytes, "application/pdf", fileName);
+        }else{
+            return null;
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

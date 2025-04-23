@@ -11,7 +11,9 @@ namespace Handbook.Models{
         private SqlConnection connection;
         private List<SQLParameter> parameters = new List<SQLParameter>();
         public Start(){
-            connection = new SqlConnection("Server=localhost\\MSSQLSERVER01;Database=master;Trusted_Connection=True;TrustServerCertificate=True;");
+            string current = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+            IEnumerable<string> rows = File.ReadLines(current+"\\appsettings.csv");
+            connection = new SqlConnection(rows.ElementAt(0));
         }
         public bool TestConn(){
             Console.WriteLine("START"); 
