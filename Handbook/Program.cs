@@ -66,25 +66,12 @@ namespace Handbook{
         }
         /*
        static void Sql(){
-            
-            Resource res = new Resource("The HRDC", 2, 59715, "The HRDC", "Welcome to HRDC, where you’ll find us working to improve our neighbors’ lives by building a better community in Southwest Montana. We invite you to become part of our HRDC family whether you need help or are able to provide help. https://thehrdc.org/");
-            if (res.Create()){
-                Console.WriteLine("tada");
-            }
-            var id = "%"+"a"+"%";
-            conn.addParam("@Title", System.Data.SqlDbType.VarChar, id);
-            List<string[]> strUser = conn.UseParam("SELECT * FROM resource WHERE Title LIKE @Title ORDER BY Zip OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY;");
-
-                    <form method="post" style="float:left;">
-                        <input type="hidden" id="ResourceID" name="ResourceID" value=@strings[0]/>
-                        <input type="image" src="imgs\tsb_new_logo_registered_tm.png" alt="@strings[1]" asp-controller="Home" asp-action="ResourcePage">
-                    </form>
-            
-            
-
             var conn = new Models.Start();
-            conn.addParam("@PersonID", System.Data.SqlDbType.Int, 0);
-            List<string[]> strUser = conn.UseParam("SELECT DISTINCT * FROM resource INNER JOIN savedresources ON resource.ID=savedresources.ResourceID WHERE savedresources.PersonID = @PersonID;");
+            
+            conn.addParam("@column", System.Data.SqlDbType.VarChar, "Title");
+            conn.addParam("@key", System.Data.SqlDbType.VarChar, "E");
+            
+            List<string[]> strUser = conn.UseConn("SELECT * FROM resource WHERE Title LIKE '%ICE%';");
             
             foreach(string[] row in strUser){
                 foreach(string str in row){
@@ -92,7 +79,6 @@ namespace Handbook{
                 }
                 Console.WriteLine();
             }
-            
-        }*/
+       }*/
     }
 }

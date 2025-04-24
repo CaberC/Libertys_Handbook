@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Handbook.Models;
 
 namespace Handbook.Controllers;
-class PersonController : Controller{
+class PersonController{
     public static string getUsers(){
         var conn = new Models.Start();
         List<string[]> strUser = conn.UseConn("SELECT * FROM person;");
@@ -27,12 +27,6 @@ class PersonController : Controller{
         }
         return true;
     }
-    public static string GetUserName(int ID){
-        Person user = new Person(ID);
-        return user.GetUserName();
-        
-    }
-
     public static bool CreateUser(out int ID, string UserName, string Email, string Password, int Zip, float Range){
         try{
             Person user = new Person(UserName, Email, Password, Zip, Range);

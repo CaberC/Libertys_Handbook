@@ -198,49 +198,38 @@ namespace Handbook.Models{
                 return -1;
             }
         }
-        public static List<string[]> ResourceSearch(string KeyWord, int Zip, int Category){            
-            string[] column;
-            if(!string.IsNullOrEmpty(KeyWord)){
-                column = new string[3];
-                column[0] = "Title";
-                column[1] = "Provider";
-                column[2] = "Details";
-            }else{column = new string[1];}
+        public static List<string[]> ResourceSearch(string KeyWord, int Zip, int Category){
             var conn = new Models.Start();
-            
             List<string[]> list = new List<string[]>();
-            foreach (string str in column){
-                string sql = "SELECT * FROM resource";
-                if(!string.IsNullOrEmpty(KeyWord)){
-                    conn.addParam("@Column", System.Data.SqlDbType.VarChar, str);
-                    conn.addParam("@KeyWord", System.Data.SqlDbType.VarChar, "%"+KeyWord.Trim()+"%");
-                    sql = sql + " WHERE @Column LIKE @KeyWord";
-                    
-                }
-                if(Zip>=0){
-                    if(!string.IsNullOrEmpty(KeyWord)){
-                        sql = sql + " AND";
-                    }else{
-                        sql = sql + " WHERE";
-                    }
-                    conn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
-                    sql = sql + " ZIP = @Zip";
-                }
-                if(Category>=0){
-                    if(!string.IsNullOrEmpty(KeyWord) || Zip>=0){
-                        sql = sql + " AND";
-                    }else{
-                        sql = sql + " WHERE";
-                    }
-                    conn.addParam("@Cat", System.Data.SqlDbType.Int, Category);
-                    sql = sql + " Category = @Cat";
-                }
-                if(list.IsNullOrEmpty()){
-                    list = conn.UseParam(sql+";");
-                }else{list.AddRange(conn.UseParam(sql+";"));}
+            string sql = "SELECT * FROM resource";
+            if(!string.IsNullOrEmpty(KeyWord)){
+                conn.addParam("@KeyWord", System.Data.SqlDbType.VarChar, "%"+KeyWord.Trim()+"%");
+                sql = sql + " WHERE Title LIKE @KeyWord";
                 
             }
-        
+            if(Zip>=0){
+                if(!string.IsNullOrEmpty(KeyWord)){
+                    sql = sql + " AND";
+                }else{
+                    sql = sql + " WHERE";
+                }
+                conn.addParam("@Zip", System.Data.SqlDbType.Int, Zip);
+                sql = sql + " ZIP = @Zip";
+            }
+            if(Category>=0){
+                if(!string.IsNullOrEmpty(KeyWord) || Zip>=0){
+                    sql = sql + " AND";
+                }else{
+                    sql = sql + " WHERE";
+                }
+                conn.addParam("@Cat", System.Data.SqlDbType.Int, Category);
+                sql = sql + " Category = @Cat";
+            }
+            try{
+                list = conn.UseParam(sql+";");
+            }catch (System.Exception e){
+                Console.WriteLine(e.Message);
+            }
             return list;
         }
     }

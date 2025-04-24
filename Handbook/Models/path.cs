@@ -103,7 +103,7 @@ namespace Handbook.Models{
                 return -1;
             }
         }
-        public bool Read(int ID){
+        public bool Read(int ID){ 
             try{
                 Start sqlConn = new Start();
                 sqlConn.addParam("@ID", System.Data.SqlDbType.Int, ID);

@@ -77,6 +77,7 @@ namespace Handbook.Models{
                     command.Parameters.Add(p.key, p.type);
                     command.Parameters[p.key].Value = p.value;
                 }
+                
                 var reader = command.ExecuteReader();
                 //Console.WriteLine(reader.RecordsAffected+" : "+sql);
                 List<string[]> table = ReadReader(reader);

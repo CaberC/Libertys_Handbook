@@ -19,8 +19,7 @@ namespace Handbook.Models{
             date = str;
             return this;
         }
-        public override string ToString()
-        {
+        public override string ToString(){
             return date;
         }
     }

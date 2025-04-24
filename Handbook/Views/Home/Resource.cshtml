@@ -16,9 +16,10 @@
             <button type="submit">Save  Resource</button>  
         </form>
     }
-    if (ViewData["UserID"].Equals(0)){
+    if (ViewData["UserID"]!=null && ViewData["UserID"].ToString().Equals("0")){
         <br>
         <form method="post" action="/Home/EditResource">
+            <input type="hidden" id="ResourceID" name="ResourceID" value="@Model.GetID()" />
             <button type="submit">Edit  Resource</button>  
         </form>
     }

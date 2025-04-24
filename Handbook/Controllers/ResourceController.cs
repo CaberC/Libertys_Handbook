@@ -3,7 +3,7 @@ using Handbook.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Handbook.Controllers;
-class ResourceController : Controller{
+class ResourceController{
     public static List<string[]> GetResources(int page){
         List<string[]> res = Resource.GetResources(page);
         return res;

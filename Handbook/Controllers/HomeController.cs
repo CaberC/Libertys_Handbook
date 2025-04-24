@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Handbook.Controllers;
 
-public class HomeController : Controller
+public class HomeController: Controller
 {
     //private readonly IMemoryCache _cache;
 
-    Models.Date day = new Date();
+    private Models.Date day = new Date();
     public IActionResult Index(){return View(@"Index");}
     public IActionResult Privacy(){return View();}
     public IActionResult FAQ(){return View();}
@@ -138,8 +138,8 @@ public class HomeController : Controller
         }
     }
     public IActionResult LogOut(){
-        HttpContext.Session.Set("UserID", null);
-        HttpContext.Session.Set("UserName", null);
+        HttpContext.Session.SetInt32("UserID", -1);
+        HttpContext.Session.SetString("UserName", "");
         return View(@"Index");
     }
     public IActionResult MemberDelete(){
@@ -151,8 +151,8 @@ public class HomeController : Controller
                     if(ID != -1){
                         PersonController.DeleteUser(ID);
                         ViewData["Body"]= "Beep Boop Deleted";
-                        HttpContext.Session.Set("UserID", null);
-                        HttpContext.Session.Set("UserName", null);
+                        HttpContext.Session.SetInt32("UserID", -1);
+                        HttpContext.Session.SetString("UserName", "");
                         return View(@"Person/Member"); 
                     }
                 }

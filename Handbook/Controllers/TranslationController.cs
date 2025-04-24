@@ -1,18 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Handbook.Models;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Data;
-using Google.Cloud.Translate.V3;
 using Google.Apis.Auth.OAuth2;
-using System;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
 
 namespace Handbook.Controllers;
-class TranslationController : Controller{
+class TranslationController{
     [HttpPost]
     public static void UploadFile(IFormFile pdfFile, int PersonID, string source, string target){
         if (pdfFile == null || pdfFile.Length <= 0){
@@ -93,6 +86,7 @@ class TranslationController : Controller{
         //Console.WriteLine(url);
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", accessToken);
+            /*
         var requestData = new TranslationRequest{
             source_language_code = source,
             target_language_code = target,
@@ -107,9 +101,9 @@ class TranslationController : Controller{
             },
             isTranslateNativePdfOnly = false,
             parent = "projects/"+rows.ElementAt(1)+"/locations/us-central1"
-        };
+        };*/
 
-        var json = JsonSerializer.Serialize(requestData);
+        var json = JsonSerializer.Serialize("requestData");
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(url, content);
         if (response.IsSuccessStatusCode){
@@ -120,26 +114,6 @@ class TranslationController : Controller{
             Console.WriteLine("Error: " + response.StatusCode);
             //Console.WriteLine(response);
         }
-    }
-    public class DocumentInputConfig{
-        public string mimeType { get; set; }
-        public string content { get; set; }
-    }
-
-    public class GcsDestination{
-        public string outputUriPrefix { get; set; }
-    }
-
-    public class DocumentOutputConfig{
-        public GcsDestination gcsDestination { get; set; }
-    }
-    public class TranslationRequest{
-        public string source_language_code { get; set; }
-        public string target_language_code { get; set; }
-        public DocumentInputConfig document_input_config { get; set; }
-        public DocumentOutputConfig document_output_config { get; set; }
-        public bool isTranslateNativePdfOnly { get; set; }
-        public string parent { get; set; }
     }
 
 }
